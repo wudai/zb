@@ -1,18 +1,17 @@
 <?php
 /* 判断请求方式 */
 define('IS_POST', (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST'));
+define('IS_AJAX', 1 == $_REQUEST['ajax']);
 /* 定义PHP_SELF常量 */
 define('PHP_SELF',  htmlentities(isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']));
-define('IN_MALL', 1);
 define('TIME', time());//当前时间戳
-class Mall {
+class Core {
     /* 启动 */
     function startup($config = array())
     {
         /* 加载初始化文件 */
         require_once(ROOT_PATH . '/core/controller/app.base.php');     //基础控制器类
         require_once(ROOT_PATH . '/core/model/model.base.php');   //模型基础类
-        require_once(ROOT_PATH . '/core/model/mmodel.base.php');   //用户模型基础类
 
         if (!empty($config['external_libs']))
         {
@@ -284,69 +283,6 @@ function &bm($model_name, $params = array(), $is_new = false)
     return $models[$model_hash];
 }
 
-/**
- *  获取一个用户信息模型
- *
- *  @author matao
- *  @param  string $model_name
- *  @param  array  $params
- *  @param  book   $is_new
- *  @return object
- */
-function &mm($model_name, $params = array(), $is_new = false)
-{
-    static $mmodels = array();
-    $model_hash = md5($model_name . var_export($params, true));
-    if ($is_new || !isset($mmodels[$model_hash]))
-    {
-        $model_file = ROOT_PATH . '/includes/mmodels/' . $model_name . '.model.php';
-        if (!is_file($model_file))
-        {
-            /* 不存在该文件，则无法获取模型 */
-            return false;
-        }
-        include_once($model_file);
-        $model_name = ucfirst($model_name) . 'MModel';
-        if ($is_new)
-        {
-            return new $model_name($params, mdb());
-        }
-        $mmodels[$model_hash] = new $model_name($params, mdb());
-    }
-
-    return $mmodels[$model_hash];
-}
-/**
- * 获取一个用户信息业务模型
- *
- * @param string $model_name
- * @param array $params
- * @param bool $is_new
- * @return object
- */
-function &bmm($model_name, $params = array(), $is_new = false)
-{
-    static $models = array();
-    $model_hash = md5($model_name . var_export($params, true));
-    if ($is_new || !isset($mmodels[$model_hash]))
-    {
-        $model_file = ROOT_PATH . '/includes/mmodels/' . $model_name . '.model.php';
-        if (!is_file($model_file))
-        {
-            /* 不存在该文件，则无法获取模型 */
-            return false;
-        }
-        include_once($model_file);
-        $model_name = ucfirst($model_name) . 'BMModel';
-        if ($is_new)
-        {
-            return new $model_name($params, mdb());
-        }
-        $mmodels[$model_hash] = new $model_name($params, mdb());
-    }
-
-    return $mmodels[$model_hash];
-}
 /**
  *    获取当前控制器实例
  *

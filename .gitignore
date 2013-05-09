@@ -1,2 +1,2 @@
-config/config.inc.php
-www/temp/
+config/zb_config.inc.php
+zb/temp/

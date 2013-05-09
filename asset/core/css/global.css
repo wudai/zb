@@ -1,0 +1,74 @@
+@charset "utf-8";/*RESET*/
+html,body{height:100%;}
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,dl,dd,form,input,textarea,select,button{margin:0;}
+ul,ol,input,select,textarea,button{padding:0;}
+li{list-style:none;}
+embed,input,select,textarea,button{font:12px/1.5 arial,sans-serif;vertical-align:middle;}
+textarea{resize:none;}
+h1,h2,h3,h4,h5{font-family:arial,sans-serif;font-weight:400;}
+img{border:none;vertical-align:middle;}
+em{font-style:normal;}
+.clear{clear:both;}
+.clearfix{*zoom:1;}
+.clearfix:after{clear:both;content:"";display:block;}
+
+/*默认链接*/
+a{text-decoration:none;color:#07c;outline:none;}
+a:hover{text-decoration:underline;color:#f33;}
+a.white{color:#fff;}
+a.gray{color:#888;}
+a.gray:hover{color:#f33;}
+a.black{color:#333;}
+a.black:hover{color:#f33;}
+a.red{color:#c03;}
+a.red:hover{color:#f33;}
+.td_grey{color:#888!important;}
+
+/*布局*/
+.left{float:left;}
+.right{float:right;}
+.center{margin:0 auto;}
+.text_center{text-align:center;}
+.text_right{text-align:right;}
+
+/*线*/
+.solid1{background:#ddd;height:1px;_overflow:hidden;}
+.dotted1{background:url(/core/img/dotted.png) repeat-x;height:1px;}
+.dashed1{background:url(/core/img/dashed.png) repeat-x;height:1px;}
+
+/*间隔*/
+.blank{width:10px;height:10px;_overflow:hidden;}
+.blank20{height:20px;}
+.blank40{height:40px;}
+.blank80{height:80px;}
+
+/*背景色*/
+.bg_gray{background:#f2f2f2;}
+.bg2{background:#c99;}
+.bg3{background:#c4a18a;}
+
+/*阴影*/
+.out{position:relative;background:#ddd;margin:10px auto;width:152px;top:4px;left:4px;}
+.in{background:#fff;border:1px solid #ccc;position:relative;top:-4px;left:-4px;}
+
+/*标题*/
+h1{font-size:14px;}
+h2{font-size:16px;font-family:Arial,'Microsoft Yahei';}
+h3{font-size:12px;}
+h4{font-size:20px;font-family:Arial,'Microsoft Yahei';}
+h5{font-size:26px;font-family:Arial,'Microsoft Yahei';}
+
+/*字体颜色*/
+.f01{color:#999;}
+.f02{color:#666;}
+.f03{color:#fff;}
+.f04{color:#c03;}
+.f05{color:#23bebc;}
+.f06{color:#ffc;}
+.f07{color:#758ea7;}
+.f08{color:#c66565;}
+.f09{color:#279327;}
+.f10{color:#333;}
+.f11{color:#85644f;}
+.f12{color:#ccc;}
+

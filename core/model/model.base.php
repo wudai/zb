@@ -1,10 +1,5 @@
 <?php
 
-if (!defined('IN_MALL'))
-{
-    exit('403 Forbidden');
-}
-
 /* 模型相关常量定义 */
 define('HAS_ONE', 1);                     //一对一关联
 define('BELONGS_TO', 2);                  //属于关联

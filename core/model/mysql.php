@@ -12,11 +12,6 @@
  * $Id: mysql.php 7634 2009-04-30 03:25:46Z yelin $
  */
 
-if (!defined('IN_MALL'))
-{
-    trigger_error('Hacking attempt', E_USER_ERROR);
-}
-
 class cls_mysql
 {
     var $max_cache_time = 300; // 最大的缓存时间，以秒为单位

@@ -1,0 +1,20 @@
+<?php
+define('DB_HOST', '192.0.0.1');
+define('DB_PORT', '3306');
+define('DB_NAME', 'zb');
+define('DB_USER', 'zb_user');
+define('DB_PW', '123wudai#@!');
+define('ASSET_VERSION', 0);
+define('ASSET_SERVER', 'http://s.wudai9.net');
+define('CACHE_SERVER', 'memcached');
+define('MEMCACHE_HOST', '192.168.0.246');
+define('MEMCACHE_PORT', '11211');
+ini_set('session.cookie_domain', 'zb.wudai9.net');
+$GLOBALS['session_memcache_config'] = array(
+	'servers' => array(
+		'192.168.0.246:11211?persistent=1&weight=100',
+	),
+);
+define('SITE_NAME', 'zb.wudai9.net');
+define('SITE_URL', 'http://'.SITE_NAME);
+define('DEBUG', true);
