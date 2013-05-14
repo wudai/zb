@@ -8,14 +8,11 @@
  */
 class FrontendApp extends MallBaseApp
 {
-	var $_tagmod;//标签模型(header中用到)
+	var $_umod;//用户模型
 	function __construct()
 	{
-		$this->FrontendApp();
-	}
-	function FrontendApp()
-	{
 		parent::__construct();
+		$this->_umod = &m('user');
 		$this->_init_view();
 	}
 	function _config_view()
@@ -61,6 +58,16 @@ class FrontendApp extends MallBaseApp
 	function _init_visitor()
 	{
 		$this->visitor =& env('visitor', new UserVisitor());
+	}
+
+    function _run_action()
+    {
+	    /* 先判断是否登录 */
+	    if (!$this->visitor->has_login && 'login' != ACT) {
+			location('/index.php?act=login');
+		    return;
+	    }
+	    parent::_run_action();
 	}
 
 }

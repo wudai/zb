@@ -1,0 +1,19 @@
+<{include file="section/header.html"}>
+<div>
+	<form action="/index.php?act=login" method="post">
+	<span>登录</span>
+	<span><label><input name="user_name" /></label></span>
+	<span><label><input name="password" type="password" /></label></span>
+	<span><label><input name="登录" type="submit" /></label></span>
+	<form>
+</div>
+<div>
+	<form action="/index.php?act=register" method="post">
+	<span>注册</span>
+	<span><label><input name="user_name" /></label></span>
+	<span><label><input name="password" type="password" /></label></span>
+	<span><label><input name="repassword" type="password" /></label></span>
+	<span><label><input name="注册" type="submit" /></label></span>
+	<form>
+</div>
+<{include file="section/footer.html"}>
