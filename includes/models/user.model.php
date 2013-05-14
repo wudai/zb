@@ -10,7 +10,7 @@
  * @copyright wudai9.net
  * @author wudai<wudai9net@qq.com> 
  */
-class MemberModel extends BaseModel {
+class UserModel extends BaseModel {
 	var $table	= 'user';
 	var $prikey = 'user_id';
 	var $_name	= 'user';
