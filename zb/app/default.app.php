@@ -14,6 +14,7 @@ class DefaultApp extends FrontendApp{
 			if (!$info = $this->_umod->auth($user_name, $password)) {
 				$this->show_warning('账户或密码错误');
 			} else {
+				$this->_do_login($user_id);
 				$this->_umod->edit($info['user_id'], array(
 					'last_login_ip'		=> real_ip(),
 					'last_login_time'	=> TIME,
@@ -50,7 +51,8 @@ class DefaultApp extends FrontendApp{
 			'create_time'	=> TIME,
 		);
 		if ($user_id = $this->_umod->add($data)) {
-			$this->show_message('注册成功');
+			$this->_do_login($user_id);
+			$this->show_message('注册成功', '进入首页', '/');
 		} else {
 			$this->show_warning('注册失败');
 		}

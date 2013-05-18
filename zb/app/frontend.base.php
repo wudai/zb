@@ -9,6 +9,8 @@
 class FrontendApp extends MallBaseApp
 {
 	var $_umod;//用户模型
+	var $_user_id;
+	var $_user_name;
 	function __construct()
 	{
 		parent::__construct();
@@ -31,9 +33,8 @@ class FrontendApp extends MallBaseApp
 				'debug'		=> ASSET_DEBUG, // $.log 的配置项，生产中取消
 				'crumb'		=> $newCrumb,
 				'user'		=> array(
-					'id'	=> $this->visitor->has_login ? $this->visitor->info['user_id'] : 0,
-					'name'	=> $this->visitor->has_login ? $this->visitor->info['user_name'] : '搜课网友',
-					'school_id'	=> $this->visitor->has_login ? intval($this->visitor->info['school_id']) : 0,
+					'user_id'	=> $this->visitor->has_login ? $this->visitor->info['user_id'] : 0,
+					'user_name'	=> $this->visitor->has_login ? $this->visitor->info['user_name'] : '游客',
 				),
 				'region'	=> array(
 					'id'	=> $this->visitor->region['region_id'],
@@ -41,9 +42,14 @@ class FrontendApp extends MallBaseApp
 				),
 			)
 		);
-		$this->assign('app', APP);
-		$this->assign('act', ACT);
-		$tag_mod = &bm('tag');//标签模型(header中用到)
+		$this->assign(array(
+			'app'	=> APP,
+			'act'	=> ACT,
+			'user'	=> array(
+				'user_id'	=> $this->visitor->has_login ? $this->visitor->info['user_id'] : 0,
+				'user_name'	=> $this->visitor->has_login ? $this->visitor->info['user_name'] : '游客',
+			),
+		));
 	}
 	function display($tpl)
 	{
@@ -58,16 +64,29 @@ class FrontendApp extends MallBaseApp
 	function _init_visitor()
 	{
 		$this->visitor =& env('visitor', new UserVisitor());
+		$this->_user_id = $this->visitor->info['user_id'];
+		$this->_user_name= $this->visitor->info['user_name'];
 	}
 
     function _run_action()
     {
 	    /* 先判断是否登录 */
-	    if (!$this->visitor->has_login && 'login' != ACT) {
+	    if (!$this->visitor->has_login && !in_array(ACT, array('login', 'register'))) {
 			location('/index.php?act=login');
 		    return;
 	    }
 	    parent::_run_action();
+	}
+
+	function _do_login($user_id) {
+		$info = $this->_umod->get_info($user_id);
+		$this->visitor->assign(array(
+			'user_id'       => $info['user_id'],
+			'user_name'     => $info['user_name'],
+		));
+		$this->_user_id = $info['user_id'];
+		$this->_user_name= $info['user_name'];
+		return true;
 	}
 
 }

@@ -18,7 +18,7 @@ ini_set('error_log', '/var/log/nginx/matao2012cps.error.log');
 ini_set('session.cookie_domain', 'zb.wudai9.net');
 $GLOBALS['session_memcache_config'] = array(
 	'servers' => array(
-		'127.0.0.1:11211?persistent=1&weight=100',
+		'tcp://127.0.0.1:11211?persistent=1&weight=100',
 	),
 );
 
