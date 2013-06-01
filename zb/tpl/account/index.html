@@ -6,9 +6,24 @@
 			<a href="/index.php?app=account&act=out">外债账户</a></span>
 		<span class="right">
 			<a href="/index.php?app=account&act=add">添加个人账户</a>&nbsp;|&nbsp;
-			<a href="/index.php?app=account&act=addout">添加外债账户</a>
+			<a href="/index.php?app=account&act=outadd">添加外债账户</a>
 		</span>
 	</div>
-	<div>
+	<div class="main">
+		<div class="account_list">
+			<table>
+			<thead>
+				<tr><th>账户名</th><th>账户类型</th><th>账户余额</th><th>明细</th></tr>
+			</thead>
+			<tbody>
+				<{foreach $list as $line}>
+				<tr>
+					<td><{$line.account_name}></td><td><{$line.type|enumtostr:"account":"type"}></td><td><{$line.balance|money}></td><td><a href="/index.php?app=account&act=detail&id=<{$line.account_id}>">查看</a></td>
+				</tr>
+				<{/foreach}>
+			</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 <{include file="section/footer.html"}>

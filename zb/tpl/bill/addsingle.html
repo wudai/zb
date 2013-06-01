@@ -1,0 +1,30 @@
+<{include file="section/header.html"}>
+<div class="body">
+	<div class="nav">
+	</div>
+	<div class="main">
+		<form action="" method="post">
+		<fieldset class="form_group">
+			<dl class="required">
+				<dt>日期：</dt>
+				<dd><input type="text" name="bill_date" value="<{$info.bill_date}>" size="12" readonly="readonly" /></dd>
+			</dl>
+			<dl class="required">
+				<dt>地点：</dt>
+				<dd>
+				<{if $pos_list}><select name="outer_user_id"><option value="0">常用地点</option><{html_options options=$pos_list selected=$info.pos_id}></select><{/if}>
+				<{if $user_list}>新增：<{/if}><input type="text" name="user_name" value="<{$info.user_name}>" size="20" class="input" />
+				</dd>
+			</dl>
+			<dl class="required">
+				<dt>金额：</dt>
+				<dd><input type="text" name="amount" value="<{$info.amount}>" size="12" /></dd>
+			<dl class="required">
+				<dt>支付构成：</dt>
+				<dd><select name="account"><option value="0">请选择</option><{html_options options=$account_list selected=$info.account_id}></select></dd>
+			</dl>
+		</fieldset>
+		</form>
+	</div>
+</div>
+<{include file="section/footer.html"}>

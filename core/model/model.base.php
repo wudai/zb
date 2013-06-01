@@ -821,7 +821,7 @@ class BaseModel extends Object
         $fields = array();
         foreach ($data as $_k => $_v)
         {
-            !is_array($_v) && $fields[] = "{$_k}='{$_v}'";
+            !is_array($_v) && $fields[] = "`{$_k}`='{$_v}'";
         }
 
         return implode(',', $fields);
@@ -895,7 +895,7 @@ class BaseModel extends Object
                 {
                     $is_array = is_array($_fv);
                     ($_k == 0 && !$is_array) && $fields[] = $_f;
-                    !$is_array && $values[$_k][] = "'{$_fv}'";
+                    if (!$is_array) $values[$_k][] = "'{$_fv}'";
                 }
                 $values[$_k] = '(' . implode(',', $values[$_k]) . ')';
             }
@@ -905,8 +905,8 @@ class BaseModel extends Object
             foreach ($data as $_k => $_v)
             {
                 $is_array = is_array($_v);
-                !$is_array && $fields[] = $_k;
-                !$is_array && $values[] = "'{$_v}'";
+                if (!$is_array) $fields[] = "`$_k`";
+                if (!$is_array) $values[] = "'{$_v}'";
             }
             $values = '(' . implode(',', $values) . ')';
         }
@@ -1461,5 +1461,19 @@ class BaseModel extends Object
 
         return $model->find($find_param);
     }
+
+	function get_options($conditions, $name_col, $val_col='', $order='') {
+		$val_col  = $val_col ? $val_col : $this->prikey;
+		if ($order) {
+			$list = $this->find(array('conditions' => $conditions, 'fields' => $name_col, 'index_key' => $val_col, 'order' => $order));
+		} else {
+			$list = $this->find(array('conditions' => $conditions, 'fields' => $name_col, 'index_key' => $val_col));
+		}
+		$res = array();
+		foreach ($list as $k => $v) {
+			$res[$k] = $v[$name_col];
+		}
+		return $res;
+	}
 }
 ?>

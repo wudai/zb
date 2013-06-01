@@ -1,0 +1,36 @@
+<{include file="section/header.html"}>
+<div class="body">
+	<div class="nav">
+		<span class="left">
+			<a href="/index.php?app=account">个人账户</a>
+			外债账户
+		</span>
+		<span class="right">
+			<a href="/index.php?app=account&act=add">添加个人账户</a>&nbsp;|&nbsp;
+			<a href="/index.php?app=account&act=outadd">添加外债账户</a>
+		</span>
+	</div>
+	<div class="main">
+		<form action="" method="post">
+		<fieldset class="form_group">
+			<dl class="required">
+				<dt>对方姓名：</dt>
+				<dd>
+				<{if $user_list}><select name="outer_user_id"><option value="0">选择已添加用户</option><{html_options options=$user_list selected=$Smarty.get.ou_id}></select><{/if}>
+				<{if $user_list}>新增：<{/if}><input type="text" name="user_name" value="<{$info.user_name}>" size="20" class="input" />
+				</dd>
+			</dl>
+			<dl class="required">
+				<dt>账户名称：</dt>
+				<dd>
+				<input type="text" name="account_name" value="<{$info.account_name}>" size="20" class="input" />(<{if $user_list}>如为新增用户<{/if}>可不填，默认为姓名)
+				</dd>
+			</dl>
+		</fieldset>
+		<p class="form_btns">
+		<button type="submit">保存</button>
+		</p>
+		</form>
+	</div>
+</div>
+<{include file="section/footer.html"}>

@@ -17,6 +17,24 @@ class UserModel extends BaseModel {
 	var $alias  = 'u';
 
 	var $_relation = array(
+		'has_account'	=> array(
+			'model'		=> 'account',
+			'type'		=> HAS_MANY,
+			'foreign_key'	=> 'user_id',
+			'refer_key'		=> 'user_id',
+		),
+		'has_outer_user'	=> array(
+			'model'		=> 'outer_user',
+			'type'		=> HAS_MANY,
+			'foreign_key'	=> 'user_id',
+			'refer_key'		=> 'user_id',
+		),
+		'has_outer_account'	=> array(
+			'model'		=> 'outer_account',
+			'type'		=> HAS_MANY,
+			'foreign_key'	=> 'user_id',
+			'refer_key'		=> 'user_id',
+		),
 	);
 	
 	function add($data, $compatible = false) {

@@ -70,12 +70,31 @@ class FrontendApp extends MallBaseApp
 
     function _run_action()
     {
-	    /* 先判断是否登录 */
-	    if (!$this->visitor->has_login && !in_array(ACT, array('login', 'register'))) {
-			location('/index.php?act=login');
-		    return;
-	    }
 	    parent::_run_action();
+	}
+
+	function login() {
+		if ($this->visitor->has_login) {
+			return;
+		}
+		if (!IS_POST) {
+			$this->display('login.html');
+			die;
+		} else {
+			$user_name = trim($_POST['user_name']);
+			$password = trim($_POST['password']);
+			if (!$info = $this->_umod->auth($user_name, $password)) {
+				$this->show_warning('账户或密码错误');
+			} else {
+				$this->_do_login($user_id);
+				$this->_umod->edit($info['user_id'], array(
+					'last_login_ip'		=> real_ip(),
+					'last_login_time'	=> TIME,
+					'login_times'		=> $info['login_times'] +1,
+				));
+				location('/');
+			}
+		}
 	}
 
 	function _do_login($user_id) {

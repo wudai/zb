@@ -72,3 +72,18 @@ h5{font-size:26px;font-family:Arial,'Microsoft Yahei';}
 .f11{color:#85644f;}
 .f12{color:#ccc;}
 
+.input,.textarea{background:#fff;border:1px solid #ccc;box-shadow:inset 0 2px 2px rgba(0,0,0,0.1);line-height:22px;}
+.textarea{padding:6px;}
+/*框架*/
+.header .body .nav.footer{width:100%;}
+.main{width:70%;}
+.nav .left{width:70%;}
+.nav .right{width:30%;}
+fieldset.form_group{border:none;border-bottom:1px solid #ccc;margin:2px;padding:2px;}
+fieldset dl{margin:15px 25px;*zoom:1;}
+fieldset dt,fieldset dd{display:inline-block;*display:inline;line-height:24px;vertical-align:top;*zoom:1;}
+fieldset dt{font-size:14px;width:150px;}
+fieldset dd{max-width:80%;}
+p.form_btns{margin-left:20%;}
+p.form_btns button{border:1px solid #70c2fe;background-color:#cbe6fb;background-image:-webkit-linear-gradient(top,#edf4fc,#dfeffc 50%,#cbe6fb 50%,#abd9fa);border-radius:3px;box-shadow:inset 0 0 1px 1px #fff;color:#234f8d;height:24px;line-height:24px;margin-right:12px;padding:0 6px;vertical-align:middle;}
+table, tr, td, th{text-align:center;}
