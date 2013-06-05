@@ -16,7 +16,7 @@ class PositionModel extends  BaseModel {
 	var $_name	= 'position';
 	var $alias	= 'pos';
 
-	function getPositionByName($q, $user_id, $limit=5) {
+	function getPositionByName($q, $user_id, $limit=10) {
 		$res = $this->find(array(
 			'conditions'	=> "position_id<100000 AND position_name like '%$q%'",
 			'limit'			=> $limit,

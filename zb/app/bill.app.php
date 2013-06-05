@@ -6,6 +6,7 @@ class BillApp extends FrontendApp {
 	var $_tlmod = null;
 	var $_emod = null;
 	var $_eamod = null;
+	var $_pmod = null;
 	function __construct() {
 		parent::__construct();
 		$this->login();
@@ -14,6 +15,7 @@ class BillApp extends FrontendApp {
 		$this->_tlmod = &m('transfer_log');
 		$this->_emod = &m('event');
 		$this->_eamod = &m('event_account');
+		$this->_pmod = &m('position');
 	}
 	function addsingle() {
 		if (!IS_POST) {
@@ -155,7 +157,31 @@ class BillApp extends FrontendApp {
 			$this->display('bill/expense.html');
 		} else {
 			$date = $_POST['bill_date'];
-			$addr = trim($_POST['addr']);
+			//处理地点
+			if ($_POST['position_id']) {
+				$position = $this->_pmod->get_info($_POST['position_id']);
+				if (!$position || ($position['user_id'] != 0 && $position['user_id'] != $this->_user_id)) {
+					$this->show_warning('请选择正确的地点');
+				}
+			} elseif ($_POST['position_name']) {
+				$position_name = trim($_POST['position_name']);
+				if ($position = $this->_pmod->get(array('conditions' => "user_id=0 AND position_name='$position_name'"))) {
+					$position_id = $position['position_id'];
+				} elseif ($position = $this->_pmod->get(array('conditions' => "user_id={$this->_user_id} AND position_name='$position_name'"))) {
+					$position_id = $position['position_id'];
+				} else {
+					$pos_data = array(
+						'user_id' => $this->_user_id,
+						'position_name' => $position_name,
+					);
+					$position_id = $this->_pmod->add($pos_data);
+					if (!$position_id) {
+						$this->show_warning('消费地点添加失败，请重新尝试');
+					}
+				}
+			} else {
+				$this->show_warning('请填写地点');
+			}
 			$amount = $_POST['amount'];
 			if (!check_money($amount)) {
 				$this->show_warning('请填写正确的金额');
@@ -272,7 +298,7 @@ class BillApp extends FrontendApp {
 			//记录事件
 			$event_data = array(
 				'user_id'		=> $this->_user_id,
-				'addr'			=> $addr,
+				'position_id'	=> $position_id,
 				'type'			=> EventModel::TYPE_EXPENSES,
 				'amount'		=> $amount,
 				'event_date'	=> $date,

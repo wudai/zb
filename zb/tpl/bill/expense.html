@@ -35,7 +35,7 @@
 			</dl>
 			<dl class="required">
 				<dt>支付账号</dt>
-				<dd><select name="account_id"><{html_options options=$account_options}></select><{*<a href="">组合支付</a>*}></dd>
+				<dd><select name="account_id"><{html_options options=$account_options}></select><label><input type="checkbox" name="use_inter_mediate" />通过账号：</label><select name="inter_mediate"><{html_options options=$account_options}></select><{*<a href="">组合支付</a>*}></dd>
 			</dl>
 		</fieldset>
 		<p>
