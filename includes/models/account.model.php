@@ -3,7 +3,7 @@
 /**
  * AccountModel 
  *
- * 个人账户表
+ * 账户表
  * 
  * @uses BaseModel
  * @package sooker
@@ -20,6 +20,17 @@ class AccountModel extends BaseModel {
 			'model'		=> 'user',
 			'type'		=> BELONGS_TO,
 			'reverse'	=> 'has_account',
+		),
+		'belongs_to_outer_user' => array(
+			'model'		=> 'outer_user',
+			'type'		=> BELONGS_TO,
+			'reverse'	=> 'has_account',
+		),
+		'has_log'	=> array(
+			'model'			=> 'account_log',
+			'type'			=> HAS_MANY,
+			'foreign_key'	=> 'account_id',
+			'refer_key'		=> 'account_id',
 		),
 	);
 

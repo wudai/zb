@@ -1,0 +1,94 @@
+<{include file="section/header.html"}>
+<{cssholder}>
+/core/js/jquery/ui/css/redmond/jquery-ui-1.10.3.custom.css
+<{/cssholder}>
+<{jsholder}>
+/core/js/jquery/ui/js/jquery-ui-1.10.3.custom.min.js
+<{/jsholder}>
+<div class="body">
+	<div class="nav">
+		<span class="left">
+			添加消费
+		</span>
+		<span class="right">
+		</span>
+	</div>
+	<div class="main">
+		<form action="" method="post">
+		<fieldset class="form_group">
+			<dl class="required">
+				<dt>日期</dt>
+				<dd><input type="text" name="bill_date" value="<{$info.bill_date}>" readonly="readonly" /></dd>
+			</dl>
+			<dl>
+				<dt>地点</dt>
+				<dd><input type="text" name="position" value="<{$info.position}>" /></dd>
+				<input type="hidden" name="position_id" />
+			</dl>
+			<dl class="required">
+				<dt>事由</dt>
+				<dd><input type="text" name="comment" value="<{$info.comment}>" /></dd>
+			</dl>
+			<dl class="required">
+				<dt>消费总金额</dt>
+				<dd><input type="text" name="amount" value="<{$info.amount}>" /></dd>
+			</dl>
+			<dl class="required">
+				<dt>支付账号</dt>
+				<dd><select name="account_id"><{html_options options=$account_options}></select><{*<a href="">组合支付</a>*}></dd>
+			</dl>
+		</fieldset>
+		<p>
+		<a href="javascript:;" class="ac_expense_detail">填写消费详情</a>
+		</p>
+		<fieldset class="form_group hidden">
+			<dl>
+				<dt>消费详情</dt>
+				<dd>
+				<ul>
+					<li>商品名称：<input name="item_name[]" />类型：<input name="item_type[]" />价格<input name="item_price" /><a href="javascript:;" class="ac_more_item">+</a></li>
+				</ul>
+				</dd>
+			</dl>
+		</fieldset>
+		<p class="form_btns">
+		<button type="submit">保存</button>
+		</p>
+		</form>
+	</div>
+</div>
+<{scriptholder}>
+<script>
+$(function() {
+	$('input[name=bill_date]').datepicker({dateFormat: 'yy-mm-dd'});
+	$('input[name=position]').autocomplete({
+		minChars:2,
+		source: function(request,response){
+			$('input[name=position_id]').val('');
+			$.ajax({
+				url: '/index.php?app=position&act=ajax_get',
+				dataType: 'json',
+				data:{
+					q : request.term,
+				},
+				success:function(data){
+					if(data.data)
+					response(
+					$.map(
+					data.data,function(item){
+						return {
+							id:item.id,
+							value:item.value,
+						}
+					})) 
+				},
+			});
+		},
+		select: function(event, ui){ 
+			$('input[name=position_id]').val(ui.item.id);
+		},
+	});
+});
+</script>
+<{/scriptholder}>
+<{include file="section/footer.html"}>

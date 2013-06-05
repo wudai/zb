@@ -16,11 +16,11 @@
 			<thead>
 				<tr>
 					<th width="20%">姓名</th>
-					<th width="10%">账户</th>
-					<th width="20%">累计借出</th>
-					<th width="20%">累计还入</th>
-					<th width="20%">当前余额</th>
-					<th width="10%">明细</th>
+					<th width="20%">账户</th>
+					<th width="15%">累计借出</th>
+					<th width="15%">累计还入</th>
+					<th width="15%">当前余额</th>
+					<th width="15%">明细</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -29,13 +29,15 @@
 					<td><{$line.user_name}></td>
 					<td colspan="5">
 						<table width="100%">
-							<{foreach $line.oa as $oa}>
+							<{foreach $line.a as $account}>
 							<tr>
-								<td width="13%"><{$oa.account_name}></td>
-								<td width="25%"><{$oa.expense|money}></td>
-								<td width="25%"><{$oa.income|money}></td>
-								<td width="25%"><{$oa.balance|money}></td>
-								<td width="12%"><a href="/index.php?app=account&act=outdetail&ou_id=<{$line.out_user_id}>&oa_id=<{$oa.oa_id}>">查看</a></td>
+								<td width="25%"><{$account.account_name}></td>
+								<td width="19%"><{$account.expense|money}></td>
+								<td width="19%"><{$account.income|money}></td>
+								<td width="19%"><{$account.balance|money}></td>
+								<td>
+									<a href="/index.php?app=account&act=outdetail&ou_id=<{$line.outer_user_id}>&oa_id=<{$account.account_id}>">查看</a>&nbsp;|&nbsp;<a href="/index.php?app=account&act=outedit&ou_id=<{$line.outer_user_id}>&oa_id=<{$account.account_id}>">编辑</a>
+								</td>
 							</tr>
 							<{/foreach}>
 						</table>

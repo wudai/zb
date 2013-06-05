@@ -32,3 +32,4 @@ define('TPL_COMPILED_DIR', ZB_PATH . '/temp/compiled');
 define('TPL_PLUGINS_DIR', ZB_PATH . '/tpl/plugins');
 
 define('DEBUG', true);
+define('CRON_LOG', '/tmp/mt_zb.log');

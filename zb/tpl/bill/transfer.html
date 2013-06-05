@@ -1,0 +1,62 @@
+<{include file="section/header.html"}>
+<{cssholder}>
+/core/js/jquery/ui/datepicker/themes/smoothness/jquery.ui.css
+<{/cssholder}>
+<{jsholder}>
+/core/js/jquery/ui/datepicker/ui.datepicker.js
+<{/jsholder}>
+<div class="body">
+	<div class="nav">
+		<span class="left">
+		</span>
+		<span class="right">
+		</span>
+	</div>
+	<div class="main">
+		<form action="" method="post">
+		<fieldset class="form_group">
+			<dl class="required">
+				<dt>转出账户</dt>
+				<dd>
+				<{if $smarty.get.tab == 'out'}>
+				<select name="out_id"><option value="">选择</option><{html_options options=$account_options selected=$info.out_account_id}></select>
+				<{else}>
+				<select name="out_id"><option value="">选择</option><{html_options options=$outer_options selected=$info.out_account_id}></select>
+				<{/if}>
+				</dd>
+			</dl>
+			<dl class="required">
+				<dt>转入账户</dt>
+				<dd>
+				<{if $smarty.get.tab == 'out'}>
+				<select name="in_id"><option value="">选择</option><{html_options options=$outer_options selected=$info.in_account_id}></select>
+				<{else}>
+				<select name="in_id"><option value="">选择</option><{html_options options=$account_options selected=$info.in_account_id}></select>
+				<{/if}>
+				</dd>
+			</dl>
+			<dl class="required">
+				<dt>日期</dt>
+				<dd><input type="text" name="bill_date" value="<{$info.bill_date}>" readonly="readonly" /></dd>
+			</dl>
+			<dl class="required">
+				<dt>金额</dt>
+				<dd><input type="text" name="amount" value="<{$info.amount}>" /></dd>
+			</dl>
+			<dl>
+				<dt>事由</dt>
+				<dd><input type="text" name="comment" value="<{$info.comment}>" /></dd>
+			</dl>
+		</fieldset>
+		<p class="form_btns">
+		<button type="submit">保存</button>
+		</p>
+		</form>
+	</div>
+</div>
+<{scriptholder}>
+<script>
+	$('input[name=bill_date]').datepicker({dateFormat: 'yy-mm-dd'});
+</script>
+<{/scriptholder}>
+<{include file="section/footer.html"}>

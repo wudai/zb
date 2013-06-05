@@ -21,8 +21,12 @@
 			<dl class="required">
 				<dt>账户类型：</dt>
 				<dd>
-				<select name="type"><option value="0"></option><{html_options options=$type_list}></select>
+				<select name="type"><option value="0"></option><{html_options options=$type_list selected=$info.type}></select>
 				</dd>
+			</dl>
+			<dl class="required">
+				<dt>排序：</dt>
+				<dd><input type="text" name="sort_order" value="<{$info.sort_order|default:"1"}>" size="20" class="input" /></dd>(请填写1~10之间的整数，数字越小排序越靠前)
 			</dl>
 		</fieldset>
 		<p class="form_btns">

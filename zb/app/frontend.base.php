@@ -108,6 +108,17 @@ class FrontendApp extends MallBaseApp
 		return true;
 	}
 
+	protected function _db_begin() {
+		$this->_umod->begin();
+	}
+
+	protected function _db_rollback() {
+		$this->_umod->rollback();
+	}
+	protected function _db_commit() {
+		$this->_umod->commit();
+	}
+
 }
 /**
  *    前台访问者

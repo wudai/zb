@@ -85,6 +85,10 @@ function check_tel($tel) {
 function check_email($email) {
 	return preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/", $email);
 }
+
+function check_money($money) {
+	return preg_match('/(^[1-9]\d*(.\d{1,2})?$)|(^0(.\d{1,2})?$)/', $money);
+}
 function location($url) {
 	header('Location: '. $url);
 	die;
