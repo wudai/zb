@@ -7,15 +7,12 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7, IE=9" /> 
 	<script src="<{'/core/js/others/html5/html5.js'|formaturl}>"></script>
 	<![endif]-->
-	<{*if !$noscriptcheck}>
-	<noscript>
-	<meta http-equiv="refresh" content="0;url=<{conf key="hostname" type="http"}>/err/noscript.php" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</noscript>
-	<{/if*}>
 <meta name="keywords" content="<{$page_keywords|default:""}>" />
 <meta name="description" content="<{$page_description|default:""}>" />
 <title><{if $title}><{$title}>_<{/if}>账本</title>
-<link href="<{$smarty.const.ASSET_SERVER}>??core/css/global.css?v=<{$smarty.const.ASSET_VERSION}>" type="text/css" rel="stylesheet"/>
+<link href="<{$smarty.const.ASSET_SERVER}>??bootstrap/css/bootstrap.css,bootstrap/css/bootstrap-responsive.css?v=<{$smarty.const.ASSET_VERSION}>" type="text/css" rel="stylesheet"/>
 <{if $smarty.const.ASSET_COMBO}>
 <style type="text/css">
 @import '<!--tpl:cssholder-->';

@@ -1,37 +1,42 @@
 <{include file="section/header.html"}>
-<div class="body">
-	<div class="nav">
-		<span class="left">
-			个人账户
-			<a href="/index.php?app=account&act=out">外债账户</a></span>
-		<span class="right">
-			<a href="/index.php?app=account&act=add">添加个人账户</a>&nbsp;|&nbsp;
-			<a href="/index.php?app=account&act=outadd">添加外债账户</a>
-		</span>
+<div class="container row-fluid">
+	<div class="nav span8 offset1">
+		<ul class="inline">
+			<li>个人账户</li>
+			<li><a href="/index.php?app=account&act=out">外债账户</a></li>
+		</ul>
 	</div>
-	<div class="main">
-		<form action="" method="post">
-		<fieldset class="form_group">
-			<dl class="required">
-				<dt>账户名称：</dt>
-				<dd>
+	<div class="span3">
+		<ul class="inline">
+			<li><a href="/index.php?app=account&act=add">添加个人账户</a></li>
+			<li><a href="/index.php?app=account&act=outadd">添加外债账户</a></li>
+		</ul>
+	</div>
+	<div class="span8 offset1">
+		<form action="" method="post" class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label">账户名称</label>
+			<div class="controls">
 				<input type="text" name="account_name" value="<{$info.account_name}>" size="20" class="input" />
-				</dd>
-			</dl>
-			<dl class="required">
-				<dt>账户类型：</dt>
-				<dd>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">账户类型</label>
+			<div class="controls">
 				<select name="type"><option value="0"></option><{html_options options=$type_list selected=$info.type}></select>
-				</dd>
-			</dl>
-			<dl class="required">
-				<dt>排序：</dt>
-				<dd><input type="text" name="sort_order" value="<{$info.sort_order|default:"1"}>" size="20" class="input" /></dd>(请填写1~10之间的整数，数字越小排序越靠前)
-			</dl>
-		</fieldset>
-		<p class="form_btns">
-		<button type="submit">保存</button>
-		</p>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">排序</label>
+			<div class="controls">
+				<input type="text" name="sort_order" value="<{$info.sort_order|default:"1"}>" size="20" class="input" /><small>(请填写1~10之间的整数，数字越小排序越靠前)</small>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn">保存</button>
+			</div>
+		</div>
 		</form>
 	</div>
 </div>

@@ -1,19 +1,68 @@
 <{include file="section/header.html"}>
-<div>
-	<form action="/index.php?act=login" method="post">
-	<span>登录</span>
-	<span>登录名<label><input name="user_name" /></label></span>
-	<span>密码<label><input name="password" type="password" /></label></span>
-	<span><label><input name="登录" type="submit" /></label></span>
-	</form>
+<div class="container row-fluid">
+	<div class="span8 offset1">
+		<ul class="nav nav-tabs" id="myTab">
+			<li class="active"><a href="#tab-login">登录</a></li>
+			<li><a href="#tab-register">注册</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane fade active in" id="tab-login">
+				<form action="/index.php?act=login" method="post" class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label">用户名</label>
+					<div class="controls">
+						<input name="user_name" placeholder="用户名"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">密码</label>
+					<div class="controls">
+						<input name="password" type="password" placeholder="密码" />
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<button type="submit" class="btn">登录</button>
+					</div>
+				</div>
+				</form>
+			</div>
+			<div class="tab-pane fade" id="tab-register">
+				<form action="/index.php?act=register" method="post" class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label">用户名</label>
+					<div class="controls">
+						<input name="user_name" placeholder="用户名"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">密码</label>
+					<div class="controls">
+						<input name="password" type="password" placeholder="密码" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">再次输入密码</label>
+					<div class="controls">
+						<input name="repassword" type="password" placeholder="请再次输入密码" />
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<button type="submit" class="btn">注册</button>
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
-<div>
-	<form action="/index.php?act=register" method="post">
-	<span>注册</span>
-	<span><label>登录名<input name="user_name" /></label></span>
-	<span><label>密码<input name="password" type="password" /></label></span>
-	<span><label>再次输入密码<input name="repassword" type="password" /></label></span>
-	<span><label><input name="注册" type="submit" /></label></span>
-	</form>
-</div>
+<{scriptholder}>
+<script>
+	$('#myTab a').click(function (e) {
+		e.preventDefault();
+		$(this).tab('show');
+	})
+</script>
+<{/scriptholder}>
 <{include file="section/footer.html"}>

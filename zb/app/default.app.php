@@ -2,6 +2,7 @@
 
 class DefaultApp extends FrontendApp{
     function index() {
+		$this->login();
         $this->display('index.html');
     }
 
