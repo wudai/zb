@@ -34,6 +34,8 @@ class AccountModel extends BaseModel {
 		),
 	);
 
+	var $_cache = array();
+
 	const TYPE_CASH = 1;//现金
 	const TYPE_DEPOSIT= 2;//储蓄卡
 	const TYPE_CREDIT = 3;//信用卡
@@ -46,5 +48,21 @@ class AccountModel extends BaseModel {
 			self::TYPE_CREDIT		=> '信用卡',
 			self::TYPE_FINANCIAL	=> '理财账户',
 		);
+	}
+
+	function getList($user_id) {
+		if ($user_id <= 0 ) return array();
+		if (array_key_exists($user_id, $this->_cache)) {
+			return $this->_cache[$user_id];
+		}
+		$list = $this->find(array('conditions' => "user_id=".$user_id, 'order' => 'sort_order'));
+		$this->_cache[$user_id] = $list;
+		return $list;
+	}
+
+	function getById($user_id, $account_id) {
+		$list = $this->getList($user_id);
+		if (!is_array($list)) return false;
+		return array_key_exists($account_id, $list) ? $list[$account_id] : false;
 	}
 }

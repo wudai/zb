@@ -11,6 +11,14 @@ class Event_accountModel extends BaseModel {
 	const TYPE_EXPENSES				= 3;
 	const TYPE_INCOME				= 4;
 
+	var $_relation = array(
+		'belongs_to_event' => array(
+			'model'		=> 'event',
+			'type'		=> BELONGS_TO,
+			'reverse'	=> 'has_ea',
+		),
+	);
+
 	function getTypeList() {
 		return array(
 			self::TYPE_TRANSFER_OUT			=> '转出',

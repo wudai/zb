@@ -1,16 +1,32 @@
 <{include file="section/header.html"}>
 <div class="container row-fluid">
-	<div class="span8 offset1">
-		<span class="left">最近消费流水</span>
-		<span class="right">
-			<a href="/index.php?app=bill&act=expense">添加消费</a>&nbsp;|&nbsp;
-			<a href="/index.php?app=bill&act=adddinner">添加聚餐账目</a>&nbsp;|&nbsp;
-			<a href="/index.php?app=bill&act=transfer&tab=out">添加转出账目</a>&nbsp;|&nbsp;
-			<a href="/index.php?app=bill&act=transfer&tab=in">添加转入账目</a>&nbsp;|&nbsp;
-			<a href="/index.php?app=bill&act=addcircle">添加内部转账</a>
-		</span>
+	<div class="span7 offset1">
+		<div class="container"><h3>最近消费</h3></div>
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr><th>日期</th><th>物品</th><th>类型</th><th>金额</th><th>备注</th></tr>
+			</thead>
+			<tbody>
+				<{foreach $list as $line}>
+				<tr>
+					<td><{$line.buy_date}></td>
+					<td><{$line.expense_name}></td>
+					<td><{$line.type|enumtostr:"expense":"type":0}></td>
+					<td><{$line.amount|money}></td>
+					<td><{$line.comment}></td>
+				</tr>
+				<{/foreach}>
+			</tbody>
+		</table>
 	</div>
-	<div>
+	<div class="span4">
+		<ul class="inline">
+			<li><a href="/index.php?app=bill&act=expense">添加消费</a></li>
+			<li><a href="/index.php?app=bill&act=adddinner">添加聚餐账目</a></li>
+			<li><a href="/index.php?app=bill&act=transfer&tab=out">添加转出账目</a></li>
+			<li><a href="/index.php?app=bill&act=transfer&tab=in">添加转入账目</a></li>
+			<li><a href="/index.php?app=bill&act=addcircle">添加内部转账</a></li>
+		</ul>
 	</div>
 </div>
 <{include file="section/footer.html"}>

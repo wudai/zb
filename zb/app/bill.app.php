@@ -7,6 +7,7 @@ class BillApp extends FrontendApp {
 	var $_emod = null;
 	var $_eamod = null;
 	var $_pmod = null;
+	var $_eemod = null;
 	function __construct() {
 		parent::__construct();
 		$this->login();
@@ -16,12 +17,7 @@ class BillApp extends FrontendApp {
 		$this->_emod = &m('event');
 		$this->_eamod = &m('event_account');
 		$this->_pmod = &m('position');
-	}
-	function addsingle() {
-		if (!IS_POST) {
-			$this->display('bill/addsingle.html');
-		} else {
-		}
+		$this->_exmod = &m('expense');
 	}
 
 	//{{{ 转账操作
@@ -95,7 +91,9 @@ class BillApp extends FrontendApp {
 				'account_id'		=> $out_id,
 				'type'				=> Event_accountModel::TYPE_TRANSFER_OUT,
 				'amount'			=> 0 - $amount,
+				'event_date'		=> $date,
 				'comment'			=> $comment,
+				'extra'				=> $in_id,
 			);
 			$event_account_out_id = $this->_eamod->add($event_account_out_data);
 			if (!$event_account_out_id) {
@@ -108,7 +106,9 @@ class BillApp extends FrontendApp {
 				'account_id'		=> $in_id,
 				'type'				=> Event_accountModel::TYPE_TRANSFER_IN,
 				'amount'			=> $amount,
+				'event_date'		=> $date,
 				'comment'			=> $comment,
+				'extra'				=> $out_id,
 			);
 			$event_account_in_id = $this->_eamod->add($event_account_in_data);
 			if (!$event_account_in_id) {
@@ -150,9 +150,11 @@ class BillApp extends FrontendApp {
 				'outer_user_id=0'
 			);
 			$account_options = $this->_amod->get_options(implode(' AND ', $cond), 'account_name', 'account_id', 'sort_order');
+			$expense_type_list = $this->_exmod->getTypeList(0);
 			$this->assign(array(
 				'account_options'	=> $account_options,
-				'outer_options'	=> $outer_options,
+				'outer_options'		=> $outer_options,
+				'expense_type_list'	=> $expense_type_list,
 			));
 			$this->display('bill/expense.html');
 		} else {
@@ -203,12 +205,14 @@ class BillApp extends FrontendApp {
 						'type'			=> Event_accountModel::TYPE_TRANSFER_OUT,
 						'amount'		=> 0 - $amount,
 						'comment'		=> $comment,
+						'extra'			=> $_POST['inter_mediate'],
 					);
 					$account_list[] = array(
 						'account_id'	=> $_POST['inter_mediate'],
 						'type'			=> Event_accountModel::TYPE_TRANSFER_IN,
 						'amount'		=> $amount,
 						'comment'		=> $comment,
+						'extra'			=> $account_id,
 					);
 					$account_list[] = array(
 						'account_id'	=> $_POST['inter_mediate'],
@@ -232,12 +236,14 @@ class BillApp extends FrontendApp {
 							'type'			=> Event_accountModel::TYPE_TRANSFER_OUT,
 							'amount'		=> 0 - $_POST['account_amount'][$index],
 							'comment'		=> $comment,
+							'extra'			=> $_POST['inter_mediate'][$index],
 						);
 						$account_list[$_POST['inter_mediate'][$index].'_in'] = array(
 							'account_id'	=> $_POST['inter_mediate'][$index],
 							'type'			=> Event_accountModel::TYPE_TRANSFER_IN,
 							'amount'		=> $_POST['account_amount'][$index],
 							'comment'		=> $comment,
+							'extra'			=> $account_id,
 						);
 						if ($account_list[$_POST['inter_mediate'][$index].'_out']) {
 							$account_list[$_POST['inter_mediate'][$index].'_out']['amount'] -= $_POST['account_amount'][$index];
@@ -266,23 +272,23 @@ class BillApp extends FrontendApp {
 			$account_ids = array_column($account_list, 'account_id');
 			$account_infos = $this->_amod->find(array('conditions' => db_create_in($account_ids, 'account_id')));
 			foreach ($account_ids  as $account_id) {
-				if (!$account_infos[$account_id] || $account_infos[$account_id] != $this->_user_id) {
+				if (!$account_infos[$account_id] || $account_infos[$account_id]['user_id'] != $this->_user_id) {
 					$this->show_warning('错误的账号');
 				}
 			}
-			print_r($account_list);
 			//消费详情处理
 			$item_list = array();
-			foreach ($_POST['item_name'] as $index => $item_name) {
-				$item_list[] = array(
-					'name'	=> $item_name,
-					'type'	=> $_POST['item_type'][$index],
-					'count' => $_POST['item_count'][$index] ? intval($_POST['item_count'][$index]) : 1,
-					'price' => $_POST['item_price'][$index],
-					'comment' => $_POST['item_comment'][$index],
-				);
-			}
-			if (!$item_list) {
+			if (count($_POST['item_name'])) {
+				foreach ($_POST['item_name'] as $index => $item_name) {
+					$item_list[] = array(
+						'name'	=> $item_name,
+						'type'	=> $_POST['item_type'][$index],
+						'count' => $_POST['item_count'][$index] ? intval($_POST['item_count'][$index]) : 1,
+						'price' => $_POST['item_price'][$index],
+						'comment' => $_POST['item_comment'][$index],
+					);
+				}
+			} else {
 				$item_list[] = array(
 					'name'		=> $comment,
 					'type'		=> 0,
@@ -291,8 +297,6 @@ class BillApp extends FrontendApp {
 					'comment'	=> $comment,
 				);
 			}
-			print_r($item_list);
-			die;
 			//开始记录
 			$this->_db_begin();
 			//记录事件
@@ -317,6 +321,7 @@ class BillApp extends FrontendApp {
 					'type'				=> $account['type'],
 					'amount'			=> $account['amount'],
 					'comment'			=> $account['comment'],
+					'event_date'		=> $date,
 				);
 				$event_account_id = $this->_eamod->add($event_account_data);
 				if (!$event_account_id) {
@@ -341,18 +346,17 @@ class BillApp extends FrontendApp {
 			}
 			//记录消费详情
 			foreach ($item_list as $item) {
-				$event_item_data = array(
+				$expense_data = array(
 					'user_id'		=> $this->_user_id,
 					'event_id'		=> $event_id,
-					'item_name'		=> $item['name'],
+					'expense_name'	=> $item['name'],
 					'type'			=> $item['type'],
-					'item_count'	=> $item['count'],
-					'item_price'	=> $item['price'],
+					'amount'		=> $item['price'],
 					'buy_date'		=> $date,
 					'comment'		=> $item['comment'],
 				);
-				$event_item_id = $this->_eimod->add($event_item_data);
-				if (!$event_item_id) {
+				$expense_id = $this->_exmod->add($expense_data);
+				if (!$expense_id) {
 					$this->_db_rollback();
 					$this->show_warning('消费详细记录失败');
 				}

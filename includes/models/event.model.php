@@ -32,6 +32,12 @@ class EventModel extends BaseModel {
 			'foreign_key'	=> 'event_id',
 			'refer_key'		=> 'event_id',
 		),
+		'has_ex'	=> array(
+			'model'			=> 'expense',
+			'type'			=> HAS_MANY,
+			'foreign_key'	=> 'event_id',
+			'refer_key'		=> 'event_id',
+		),
 	);
 
 	function getTypeList() {

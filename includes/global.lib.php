@@ -122,3 +122,16 @@ function array_find_deep($arr, $colname) {
 function cron_log($cron_name, $status='', $data='') {
 	error_log(date('Y-m-d H:i:s')."\t$cron_name\t$action\t$status\t$data\n", 3, CRON_LOG);
 }
+/**
+ *    获取URL地址
+ *
+ *    @author    Garbin
+ *    @param     mixed $query
+ *    @param     string $rewrite_name
+ *    @return    string
+ */
+function url($query)
+{
+	$url = '/index.php?' . $query;
+    return str_replace('&', '&amp;', $url);
+}

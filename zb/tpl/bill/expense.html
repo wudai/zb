@@ -1,67 +1,68 @@
 <{include file="section/header.html"}>
 <{cssholder}>
-/core/js/jquery/ui/css/redmond/jquery-ui-1.10.3.custom.css
+/bootstrap/datepicker/css/datepicker.css
 <{/cssholder}>
 <{jsholder}>
-/core/js/jquery/ui/js/jquery-ui-1.10.3.custom.min.js
+/bootstrap/datepicker/js/bootstrap-datepicker.js
 <{/jsholder}>
-<div class="body">
-	<div class="nav">
+<div class="container row-fluid">
+	<div class="nav span8 offset1">
 		<span class="left">
-			添加消费
 		</span>
 		<span class="right">
 		</span>
 	</div>
-	<div class="main">
-		<form action="" method="post">
-		<fieldset class="form_group">
-			<dl class="required">
-				<dt>日期</dt>
-				<dd><input type="text" name="bill_date" value="<{$info.bill_date}>" readonly="readonly" /></dd>
-			</dl>
-			<dl>
-				<dt>地点</dt>
-				<dd><input type="text" name="position" value="<{$info.position}>" /></dd>
-				<input type="hidden" name="position_id" />
-			</dl>
-			<dl class="required">
-				<dt>事由</dt>
-				<dd><input type="text" name="comment" value="<{$info.comment}>" /></dd>
-			</dl>
-			<dl class="required">
-				<dt>消费总金额</dt>
-				<dd><input type="text" name="amount" value="<{$info.amount}>" /></dd>
-			</dl>
-			<dl class="required">
-				<dt>支付账号</dt>
-				<dd><select name="account_id"><{html_options options=$account_options}></select><label><input type="checkbox" name="use_inter_mediate" />通过账号：</label><select name="inter_mediate"><{html_options options=$account_options}></select><{*<a href="">组合支付</a>*}></dd>
-			</dl>
+	<div class="span3">
+	</div>
+	<div class="span8 offset1">
+		<form action="" method="post" class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label">日期</label>
+			<div class="controls"><input type="text" name="bill_date" readonly="readonly" /></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">地点</label>
+			<div class="controls"><input type="text" name="position_name" autocomplete="off" /></div>
+			<input type="hidden" name="position_id" />
+		</div>
+		<div class="control-group">
+			<label class="control-label">事由</label>
+			<div class="controls"><input type="text" name="comment"></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">消费总金额</label>
+			<div class="controls"><input type="text" name="amount" /></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">支付账号</label>
+			<div class="controls">
+				<select name="account_id" class="inline"><{html_options options=$account_options}></select>
+				<label class="inline checkbox"><input type="checkbox" name="use_inter_mediate" />通过账号：</label>
+				<select name="inter_mediate" class="inline"><option value="">请选择</option><{html_options options=$account_options}></select>
+				<{*<a href="">组合支付</a>*}>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<a href="javascript:;" class="ac_expense_detail">填写消费详情</a>
+			</div>
+		</div>
+		<fieldset class="hidden expense_detail">
+			<legend>消费详情<small><a href="javascript:;" class="ac_expense_detail">增加</a></small></legend>
 		</fieldset>
-		<p>
-		<a href="javascript:;" class="ac_expense_detail">填写消费详情</a>
-		</p>
-		<fieldset class="form_group hidden">
-			<dl>
-				<dt>消费详情</dt>
-				<dd>
-				<ul>
-					<li>商品名称：<input name="item_name[]" />类型：<input name="item_type[]" />价格<input name="item_price" /><a href="javascript:;" class="ac_more_item">+</a></li>
-				</ul>
-				</dd>
-			</dl>
-		</fieldset>
-		<p class="form_btns">
-		<button type="submit">保存</button>
-		</p>
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn">保存</button>
+			</div>
+		</div>
 		</form>
 	</div>
 </div>
 <{scriptholder}>
 <script>
 $(function() {
-	$('input[name=bill_date]').datepicker({dateFormat: 'yy-mm-dd'});
-	$('input[name=position]').autocomplete({
+	$('input[name=bill_date]').datepicker({format: 'yyyy-mm-dd'});
+	$('input[name=position_name]').typeahead({
 		minChars:2,
 		source: function(request,response){
 			$('input[name=position_id]').val('');
@@ -69,25 +70,63 @@ $(function() {
 				url: '/index.php?app=position&act=ajax_get',
 				dataType: 'json',
 				data:{
-					q : request.term,
+					q : request,
 				},
 				success:function(data){
-					if(data.data)
-					response(
-					$.map(
-					data.data,function(item){
-						return {
-							id:item.id,
-							value:item.value,
-						}
-					})) 
+					if(data.data) {
+						var resultList = Array();
+						resultList = data.data.map(function (item) {
+							var aItem = { id: item.id, value: item.value};
+							return JSON.stringify(aItem);
+						});
+						return response(resultList);
+					}
 				},
 			});
 		},
-		select: function(event, ui){ 
-			$('input[name=position_id]').val(ui.item.id);
+		matcher: function (obj) {
+			return true;
 		},
+		sorter: function (items) {          
+			var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+			while (aItem = items.shift()) {
+				var item = JSON.parse(aItem);
+				if (!item.value.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+				else if (item.value.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+				else caseInsensitive.push(JSON.stringify(item));
+			}
+			return beginswith.concat(caseSensitive, caseInsensitive)
+		},
+		highlighter: function (obj) {
+			var item = JSON.parse(obj);
+			var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+			return item.value.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+				return '<strong>' + match + '</strong>'
+			})
+		},
+		updater: function (obj) {
+			var item = JSON.parse(obj);
+			$('input[name="position_id"]').val(item.id);
+			return item.value;
+		}
 	});
+	$.subscribe('click_expense_detail', function(ev){
+		$('.expense_detail').removeClass('hidden');
+		var html = [];
+		html.push('<div class="control-group"><div class="controls-row">');
+		html.push('<input name="item_name[]" placeholder="名称" class="span3"/>');
+		html.push('<select name="item_type[]" class="span2"><option value="0">类型</option><{foreach $expense_type_list as $type_id => $type_name}><option value="<{$type_id}>"><{$type_name}></option><{/foreach}></select></label>');
+		html.push('<input name="item_price[]" placeholder="金额" class="span1" />');
+		html.push('<input name="item_comment[]" placeholder="备注，选填" class="span3" />');
+		html.push('<a href="javascript:;" class="ac_drop_detail">删除</a>');
+		html.push('</div></div>');
+		$('.expense_detail').append(html.join(''));
+	}).subscribe('click_drop_detail', function(ev){
+		$(ev.target).parent().parent().remove();
+		if ($('.expense_detail div').length == 0) {
+			$('.expense_detail').addClass('hidden');
+		}
+});
 });
 </script>
 <{/scriptholder}>

@@ -273,30 +273,31 @@ class AccountApp extends FrontendApp {
 		if ($account_id <= 0) {
 			$this->show_warning('账号不存在');
 		}
-		$info = $this->_amod->get_info($account_id);
-		if (!$info || $info['user_id'] != $this->_user_id) {
+		$info = $this->_amod->getById($this->_user_id, $account_id);
+		if (!$info) {
 			$this->show_warning('账号不存在');
 		}
 		$conditions = array(
 			'account_id='.$account_id,
 		);
 		if ($_GET['start_date']) {
-			$conditions[] = "bill_date>=". $_GET['start_date'];
+			$conditions[] = "ea.event_date>=". $_GET['start_date'];
 		}
 		if ($_GET['end_date']) {
-			$conditions[] = "bill_date<=". $_GET['end_date'];
+			$conditions[] = "ea.event_date<=". $_GET['end_date'];
 		}
 		$list = $this->_eamod->find(array(
 			'conditions'	=> 'account_id='.$account_id,
-			'join'			=> 'belongs_to_event',
-			'fields'		=> 'this.*,e.comment',
+			//'join'			=> 'belongs_to_event',
+			'fields'		=> 'this.*',
 			'limit'			=> $page['limit'],
 			'count'			=> true,
-			'order'			=> 'bill_date DESC, id DESC',
+			'order'			=> 'ea.event_date DESC, id DESC',
 		));
 		$page = $this->_get_page();
 		$this->_format_page($page);
 		$this->assign('info', $info);
+		$this->assign('list', $list);
 		$this->assign('page_info', $page);
 		$this->display('account/detail.html');
 	}

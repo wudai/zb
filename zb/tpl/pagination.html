@@ -1,0 +1,11 @@
+<{if $page_info.page_count > 1}>
+<!--page start-->
+<div class="pagination">
+	<{if $page_info.prev_link}><a href="<{$page_info.prev_link}>">上一页</a><{/if}>
+	<{foreach $page_info.page_links as $page => $link}>
+	<a href="<{$link}>"<{if $page_info.curr_page == $page}> class="active"<{/if}>><{$page}></a>
+	<{/foreach}>
+	<{if $page_info.next_link}><a href="<{$page_info.next_link}>">下一页</a><{/if}>
+</div>
+<!--page end-->
+<{/if}>

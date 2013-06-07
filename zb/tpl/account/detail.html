@@ -1,0 +1,42 @@
+<{include file="section/header.html"}>
+<div class="container row-fluid">
+	<div class="nav span8 offset1">
+		<ul class="inline">
+			<li class="active">个人账户</li>
+			<li><a href="/index.php?app=account&act=out">外债账户</a></li>
+		</ul>
+	</div>
+	<div class="span3">
+		<ul class="inline">
+			<li><a href="/index.php?app=account&act=add">添加个人账户</a></li>
+			<li><a href="/index.php?app=account&act=outadd">添加外债账户</a></li>
+		</ul>
+	</div>
+	<div class="span8 offset1">
+		<div class="container"><h3><{$info.account_name}></h3></div>
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr><th>日期</th><th>类型</th><th>金额</th><th>事件</th></tr>
+			</thead>
+			<tbody>
+				<{foreach $list as $line}>
+				<tr>
+					<td><{$line.event_date}></td>
+					<td>
+						<{$line.type|enumtostr:"event_account":"type"}>
+						<{if $line.type == 1}><small>至<{$line.extra|accid2name:$user.user_id}></small>
+						<{elseif $line.type == 2}><small>自<{$line.extra|accid2name:$user.user_id}></small>
+						<{/if}>
+					</td>
+					<td><{$line.amount|money}></td>
+					<td>
+						<a href="/index.php?app=event&act=detail&id=<{$line.event_id}>"><{$line.comment}></a>
+					</td>
+				</tr>
+				<{/foreach}>
+			</tbody>
+		</table>
+		<{include file="pagination.html"}>
+	</div>
+</div>
+<{include file="section/footer.html"}>

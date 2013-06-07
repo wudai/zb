@@ -3,6 +3,19 @@
 class DefaultApp extends FrontendApp{
     function index() {
 		$this->login();
+		$ex_mod = &m('expense');
+		$list = $ex_mod->find(array(
+			'conditions'	=> 'user_id='.$this->_user_id,
+			//'join'			=> 'belongs_to_event',
+			'fields'		=> 'this.*',
+			'limit'			=> 20,
+			'count'			=> true,
+			'order'			=> 'buy_date DESC, event_id DESC',
+		));
+		$page = $this->_get_page();
+		$this->_format_page($page);
+		$this->assign('list', $list);
+		$this->assign('page_info', $page);
         $this->display('index.html');
     }
 
