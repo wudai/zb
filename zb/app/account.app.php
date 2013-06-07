@@ -121,7 +121,11 @@ class AccountApp extends FrontendApp {
 	function outadd() {
 		$user_list = $this->_oumod->get_options('user_id='.$this->_user_id, 'user_name', 'outer_user_id');
 		if (!IS_POST) {
-			$this->assign('user_list', $user_list);
+			$arr = array();
+			foreach ($user_list as $ou_id => $name) {
+				$arr[] = array('id' => $ou_id, 'value' => $name);
+			}
+			$this->assign('user_list', $arr);
 			$this->display('account/outadd.html');
 		} else {
 			$sort_order = intval($_POST['sort_order']);
@@ -300,5 +304,18 @@ class AccountApp extends FrontendApp {
 		$this->assign('list', $list);
 		$this->assign('page_info', $page);
 		$this->display('account/detail.html');
+	}
+
+	function ajax_getouter() {
+        $q = trim($_REQUEST['q']);
+		$res = $this->_pmod->getPositionByName($q, $this->_user_id);
+		$data = array();
+		foreach ($res as $one) {
+			$data[] = array(
+				'id'	=> $one['position_id'],
+				'value'	=> $one['position_name'],
+			);
+		}
+		$this->json_out(0, '', $data);
 	}
 }

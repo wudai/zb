@@ -1,14 +1,14 @@
 <{include file="section/header.html"}>
-<div class="blank20"></div>
-<div class="w990 auth_wrap clearfix">
-    <div id="m_msg"><{*失败用：auth_fail，提示用：auth_wait，成功用：auth_success*}>
-        <div class="<{if $icon == 'notice'}>auth_success<{else}>auth_fail<{/if}>">
-            <h3><{$message}></strong></h3>
-            <{foreach $links as $item }>
-            <p><a href="<{$item.href}>"><{$item.text}></a></p>
-            <{/foreach}>
+<div class="container">
+	<div class="alert <{if $icon == 'notice'}>alert-success<{else}>alert-error<{/if}>">
+            <strong><{$message}></strong>
         </div>
     </div>
+	<div class="container">
+	<{foreach $links as $item }>
+	<p><a href="<{$item.href}>"><{$item.text}></a></p>
+	<{/foreach}>
+	</div>
 </div>
 <{include file="section/footer.html"}>
 </body>

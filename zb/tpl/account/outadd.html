@@ -45,61 +45,31 @@
 <{scriptholder}>
 <script>
 	$('input[name=user_name]').typeahead({
-		source : function (query, response) {
-			$('input[name=outer_user_id]').val('');
-			console.log(query);
-			$.ajax({
-				url: '/index.php?app=position&act=ajax_get',
-				dataType: 'json',
-				data:{
-					q : query,
-				},
-				success:function(data){
-					if(data.data)
-					response(
-					$.map(
-					data.data,function(item){
-						return {
-							id:item.id,
-							value:item.value,
-						}
-					})) 
-				},
-			});
-		},
+		source : <{$user_list|@json_encode}>,
 		matcher: function (obj) {
-			var item = JSON.parse(obj);
-			return ~item.name.toLowerCase().indexOf(this.query.toLowerCase());
+			return ~obj.value.toLowerCase().indexOf(this.query.toLowerCase());
 		},
 		sorter: function (items) {          
 			var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
 			while (aItem = items.shift()) {
-				var item = JSON.parse(aItem);
-				if (!item.name.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-				else if (~item.name.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-				else caseInsensitive.push(JSON.stringify(item));
+				if (!aItem.value.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(aItem));
+				else if (aItem.value.indexOf(this.query)) caseSensitive.push(JSON.stringify(aItem));
+				else caseInsensitive.push(JSON.stringify(aItem));
 			}
-
 			return beginswith.concat(caseSensitive, caseInsensitive)
-
 		},
-
-
 		highlighter: function (obj) {
 			var item = JSON.parse(obj);
 			var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
-			return item.name.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+			return item.value.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
 				return '<strong>' + match + '</strong>'
 			})
 		},
-
 		updater: function (obj) {
 			var item = JSON.parse(obj);
-			$('#IdControl').attr('value', item.id);
-			return item.name;
+			$('input[name="outer_user_id"]').val(item.id);
+			return item.value;
 		}
-		items: 10,
-		minLength: 1
 	});
 </script>
 <{/scriptholder}>
