@@ -27,7 +27,7 @@ class AccountApp extends FrontendApp {
 			$this->display('account/add.html');
 		} else {
 			$sort_order = intval($_POST['sort_order']);
-			if (!in_array($sort_order, range(1, 10)) {
+			if (!in_array($sort_order, range(1, 10))) {
 				$this->show_warning('排序数字填写错误，请填写1-10之间的整数');
 			}
 			$type = intval($_POST['type']);
