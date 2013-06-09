@@ -322,6 +322,7 @@ class BillApp extends FrontendApp {
 					'type'				=> $account['type'],
 					'amount'			=> $account['amount'],
 					'comment'			=> $account['comment'],
+					'extra'				=> $account['extra'],
 					'event_date'		=> $date,
 				);
 				$event_account_id = $this->_eamod->add($event_account_data);
