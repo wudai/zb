@@ -18,7 +18,7 @@
 		<form action="" method="post" class="form-horizontal">
 		<div class="control-group">
 			<label class="control-label">日期</label>
-			<div class="controls"><input type="text" name="bill_date" readonly="readonly" /></div>
+			<div class="controls"><input type="text" name="bill_date" value="<{$smarty.now|date_format:"%Y-%m-%d"}>" /></div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">地点</label>
