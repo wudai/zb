@@ -13,7 +13,7 @@
 	</div>
 	<div class="span5">
 	</div>
-	<div class="span6 offset1">
+	<div class="span7 offset1">
 		<ul class="nav nav-tabs">
 			<li<{if $smarty.get.tab == 'out'}> class="active"<{/if}>><a href="/index.php?app=<{$app}>&act=<{$act}>&tab=out">转出</a></li>
 			<li<{if $smarty.get.tab == 'in'}> class="active"<{/if}>><a href="/index.php?app=<{$app}>&act=<{$act}>&tab=in">转入</a></li>
@@ -22,24 +22,26 @@
 		</ul>
 		<form action="" method="post" class="form-horizontal">
 		<div class="control-group">
-				<label class="control-label">转出账户</label>
-				<div class="controls">
+			<label class="control-label">转出账户</label>
+			<div class="controls">
 				<{if $smarty.get.tab == 'out' || $smarty.get.tab == 'inner'}>
-				<select name="out_id"><option value="">选择</option><{html_options options=$account_options selected=$smarty.get.ou_id}></select>
+				<select name="out_id" class="inline"><option value="">选择</option><{html_options options=$account_options selected=$smarty.get.ou_id}></select>
+				<label class="inline checkbox"><input type="checkbox" name="user_inter_mediate">通过账号：</label>
+				<select class="inline" name="inter_mediate"><option value="">选择</option><{html_options options=$account_options}></select>
 				<{else}>
 				<select name="out_id"><option value="">选择</option><{html_options options=$outer_options selected=$smarty.get.ou_id}></select>
 				<{/if}>
-				</div>
+			</div>
 		</div>
 		<div class="control-group">
-				<label class="control-label">转入账户</label>
-				<div class="controls">
+			<label class="control-label">转入账户</label>
+			<div class="controls">
 				<{if $smarty.get.tab == 'out' || $smarty.get.tab == 'outer'}>
 				<select name="in_id"><option value="">选择</option><{html_options options=$outer_options}></select>
 				<{else}>
 				<select name="in_id"><option value="">选择</option><{html_options options=$account_options}></select>
 				<{/if}>
-				</div>
+			</div>
 		</div>
 		<div class="control-group">
 				<label class="control-label">日期</label>

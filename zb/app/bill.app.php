@@ -48,27 +48,66 @@ class BillApp extends FrontendApp {
 			if ($out_id <= 0 || $in_id <= 0 || !check_money($amount)) {
 				$this->show_warning('信息不完整');
 			}
-			$out_info = $this->_amod->get_info($out_id);
-			$in_info = $this->_amod->get_info($in_id);
-			if (!$out_info || $out_info['user_id'] != $this->_user_id) {
+			$out_info = $this->_amod->getById($this->_user_id, $out_id);
+			$in_info = $this->_amod->getById($this->_user_id, $in_id);
+			if (!$out_info) {
 				$this->show_warning('转出账号错误');
 			}
-			if (!$in_info || $in_info['user_id'] != $this->_user_id) {
+			if (!$in_info) {
 				$this->show_warning('转入账号错误');
 			}
+			$accounts[$out_id] = $out_info;
+			$accounts[$in_id] = $in_info;
 			$date = $_POST['bill_date'];
-			if ($out_info['outer_user_id'] > 0) {
-				if ($in_info['outer_user_id'] > 0) {
-					$event_type = EventModel::TYPE_TRANSFER_OUTER;
-				} else {
-					$event_type = EventModel::TYPE_TRANSFER_IN;
+
+			$inter_mediate_id = intval($_POST['inter_mediate']);
+			if ($inter_mediate_id) {
+				$inter_mediate_info = $this->_amod->getById($this->_user_id, $inter_mediate_id);
+				if (!$inter_mediate_info) {
+					$this->show_warning('中介账号错误');
 				}
+				$accounts[$inter_mediate_id] = $inter_mediate_info;
+			}
+			$event_type = $this->_getEventType($out_info, $in_info);
+			$account_list = array();
+			if ($inter_mediate_info) {
+				$account_list[] = array(
+					'account_id' => $out_id,
+					'type'		=> Event_accountModel::TYPE_TRANSFER_OUT,
+					'amount'	=> 0 - $amount,
+					'extra'		=> $inter_mediate_id,
+				);
+				$account_list[] = array(
+					'account_id'	=> $inter_mediate_id,
+					'type'			=> Event_accountModel::TYPE_TRANSFER_IN,
+					'amount'		=> $amount,
+					'extra'			=> $out_id,
+				);
+				$account_list[] = array(
+					'account_id'	=> $inter_mediate_id,
+					'type'			=> Event_accountModel::TYPE_TRANSFER_OUT,
+					'amount'		=> 0 - $amount,
+					'extra'			=> $in_id,
+				);
+				$account_list[] = array(
+					'account_id'	=> $in_id,
+					'type'			=> Event_accountModel::TYPE_TRANSFER_IN,
+					'amount'		=> $amount,
+					'extra'			=> $inter_mediate_id,
+				);
 			} else {
-				if ($in_info['outer_user_id'] > 0) {
-					$event_type = EventModel::TYPE_TRANSFER_OUT;
-				} else {
-					$event_type = EventModel::TYPE_TRANSFER_INNER;
-				}
+				$account_list[] = array(
+					'account_id'	=> $out_id,
+					'type'			=> Event_accountModel::TYPE_TRANSFER_OUT,
+					'amount'		=> 0 - $amount,
+					'extra'			=> $in_id,
+				);
+				$account_list[] = array(
+					'account_id'	=> $in_id,
+					'type'			=> Event_accountModel::TYPE_TRANSFER_IN,
+					'amount'		=> $amount,
+					'extra'			=> $out_id,
+				);
 			}
 			$this->_db_begin();
 			//将转账当作一个事件
@@ -85,53 +124,37 @@ class BillApp extends FrontendApp {
 			if (!$event_id) {
 				$this->show_warning('转账事件记录失败');
 			}
-			//记录支出事件详情
-			$event_account_out_data = array(
-				'event_id'			=> $event_id,
-				'account_id'		=> $out_id,
-				'type'				=> Event_accountModel::TYPE_TRANSFER_OUT,
-				'amount'			=> 0 - $amount,
-				'event_date'		=> $date,
-				'comment'			=> $comment,
-				'extra'				=> $in_id,
-			);
-			$event_account_out_id = $this->_eamod->add($event_account_out_data);
-			if (!$event_account_out_id) {
-				$this->_db_rollback();
-				$this->show_warning('支出详细记录失败');
-			}
-			//记录转入事件详情
-			$event_account_in_data = array(
-				'event_id'			=> $event_id,
-				'account_id'		=> $in_id,
-				'type'				=> Event_accountModel::TYPE_TRANSFER_IN,
-				'amount'			=> $amount,
-				'event_date'		=> $date,
-				'comment'			=> $comment,
-				'extra'				=> $out_id,
-			);
-			$event_account_in_id = $this->_eamod->add($event_account_in_data);
-			if (!$event_account_in_id) {
-				$this->_db_rollback();
-				$this->show_warning('转入详细记录失败');
-			}
-			//修改转出账号余额
-			$out_data = array(
-				'expense'	=> $out_info['expense'] + $amount,
-				'balance'	=> $out_info['balance'] - $amount,
-			);
-			if (!$this->_amod->edit($out_id, $out_data)) {
-				$this->_db_rollback();
-				$this->show_warning('转出账户余额变更失败');
-			}
-			//修改转入账号余额
-			$in_data = array(
-				'income'	=> $in_info['income'] + $amount,
-				'balance'	=> $in_info['balance'] + $amount,
-			);
-			if (!$this->_amod->edit($in_id, $in_data)) {
-				$this->_db_rollback();
-				$this->show_warning('转入账户余额变更失败');
+			//记录事件详情
+			foreach ($account_list as $account) {
+				$data = array(
+					'event_id'			=> $event_id,
+					'account_id'		=> $account['account_id'],
+					'type'				=> $account['type'],
+					'amount'			=> $account['amount'],
+					'event_date'		=> $date,
+					'comment'			=> $comment,
+					'extra'				=> $account['extra'],
+				);
+				$event_account_id = $this->_eamod->add($data);
+				if (!$event_account_id) {
+					$this->_db_rollback();
+					$this->show_warning('详细记录失败');
+				}
+				if ($account['amount'] > 0) {
+					$acc_data = array(
+						'income' => $accounts[$account['account_id']]['income'] + $account['amount'],
+						'balance' => $accounts[$account['account_id']]['balance'] + $account['amount'],
+					);
+				} else {
+					$acc_data = array(
+						'expense' => $accounts[$account['account_id']]['expense'] - $account['amount'],
+						'balance' => $accounts[$account['account_id']]['balance'] + $account['amount'],
+					);
+				}
+				if (!$this->_amod->edit($account['account_id'] , $acc_data)) {
+					$this->_db_rollback();
+					$this->show_warning('修改余额失败');
+				}
 			}
 			$this->_db_commit();
 			$this->show_message('记录添加成功',
@@ -372,4 +395,19 @@ class BillApp extends FrontendApp {
 		}
 	}
 	//}}}
+	function _getEventType($out_info, $in_info) {
+		if ($out_info['outer_user_id'] > 0) {
+			if ($in_info['outer_user_id'] > 0) {
+				return EventModel::TYPE_TRANSFER_OUTER;
+			} else {
+				return EventModel::TYPE_TRANSFER_IN;
+			}
+		} else {
+			if ($in_info['outer_user_id'] > 0) {
+				return EventModel::TYPE_TRANSFER_OUT;
+			} else {
+				return EventModel::TYPE_TRANSFER_INNER;
+			}
+		}
+	}
 }
