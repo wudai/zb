@@ -127,7 +127,7 @@ class BillApp extends FrontendApp {
 			//修改转入账号余额
 			$in_data = array(
 				'income'	=> $in_info['income'] + $amount,
-				'balance'	=> $out_info['balance'] + $amount,
+				'balance'	=> $in_info['balance'] + $amount,
 			);
 			if (!$this->_amod->edit($in_id, $in_data)) {
 				$this->_db_rollback();
