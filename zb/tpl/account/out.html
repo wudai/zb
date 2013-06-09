@@ -22,7 +22,7 @@
 					<th width="15%">累计借出</th>
 					<th width="15%">累计还入</th>
 					<th width="15%">当前欠款</th>
-					<th width="15%">明细</th>
+					<th width="15%">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,14 +30,16 @@
 				<{foreach $line.a as $account}>
 				<tr>
 					<{if $account@first}>
-					<td <{if count($line.a > 1)}> rowspan="<{$line.a|@count}>"<{/if}> ><{$line.user_name}></td>
+					<td<{if count($line.a) > 1}> rowspan="<{$line.a|@count}>"<{/if}>>
+						<a href="/index.php?app=account&act=outdetail&ou_id=<{$line.outer_user_id}>"><{$line.user_name}></a>
+					</td>
 					<{/if}>
 					<td><{$account.account_name}></td>
 					<td><{$account.income|money}></td>
 					<td><{$account.expense|money}></td>
 					<td<{if $account.balance > 0}> class="text-error"<{/if}>><{$account.balance|money}></td>
 					<td>
-						<a href="/index.php?app=account&act=outdetail&ou_id=<{$line.outer_user_id}>&oa_id=<{$account.account_id}>">查看</a>&nbsp;|&nbsp;<a href="/index.php?app=account&act=outedit&ou_id=<{$line.outer_user_id}>&oa_id=<{$account.account_id}>">编辑</a>
+						<a href="/index.php?app=account&act=outedit&ou_id=<{$line.outer_user_id}>&oa_id=<{$account.account_id}>">编辑</a>
 					</td>
 				</tr>
 				<{foreachelse}>

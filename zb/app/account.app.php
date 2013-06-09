@@ -306,6 +306,50 @@ class AccountApp extends FrontendApp {
 		$this->display('account/detail.html');
 	}
 
+	function outdetail() {
+		$ou_id = intval($_GET['ou_id']);
+		if ($ou_id <= 0) {
+			$this->show_warning('外债用户不存在');
+		}
+		$info = $this->_oumod->get_info($ou_id);
+		if (!$info || $info['user_id'] != $this->_user_id) {
+			$this->show_warning('账号不存在');
+		}
+		$account_all = $this->_amod->getList($this->_user_id);
+		$accounts = array();
+		foreach ($account_all as $account) {
+			if ($account['outer_user_id'] == $ou_id) {
+				$accounts[$account['account_id']] = $account;
+				$info['income'] += $account['income'];
+				$info['expense'] += $account['expense'];
+				$info['balance'] += $account['balance'];
+			}
+		}
+		$conditions = array(
+			db_create_in(array_keys($accounts), 'account_id'),
+		);
+		if ($_GET['start_date']) {
+			$conditions[] = "ea.event_date>=". $_GET['start_date'];
+		}
+		if ($_GET['end_date']) {
+			$conditions[] = "ea.event_date<=". $_GET['end_date'];
+		}
+		$list = $this->_eamod->find(array(
+			'conditions'	=> implode(' AND ', $conditions),
+			'fields'		=> 'this.*',
+			'limit'			=> $page['limit'],
+			'count'			=> true,
+			'order'			=> 'ea.event_date DESC, id DESC',
+		));
+		$page = $this->_get_page();
+		$this->_format_page($page);
+		$this->assign('info', $info);
+		$this->assign('accounts', $accounts);
+		$this->assign('list', $list);
+		$this->assign('page_info', $page);
+		$this->display('account/outdetail.html');
+	}
+
 	function ajax_getouter() {
         $q = trim($_REQUEST['q']);
 		$res = $this->_pmod->getPositionByName($q, $this->_user_id);
