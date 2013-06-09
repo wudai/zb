@@ -192,7 +192,7 @@ class BillApp extends FrontendApp {
 			if (!strlen($comment)) {
 				$this->show_warning('请填写事由');
 			}
-			//支付账号处理
+			//{{{支付账号处理
 			$account_list = array();
 			if (!is_array($_POST['account_id'])) {
 				$account_id = intval($_POST['account_id']);
@@ -275,11 +275,12 @@ class BillApp extends FrontendApp {
 				if (!$account_infos[$account_id] || $account_infos[$account_id]['user_id'] != $this->_user_id) {
 					$this->show_warning('错误的账号');
 				}
-			}
-			//消费详情处理
+			}//}}}
+			//{{{消费详情处理
 			$item_list = array();
 			if (count($_POST['item_name'])) {
 				foreach ($_POST['item_name'] as $index => $item_name) {
+					if (!$item_name) continue;
 					$item_list[] = array(
 						'name'	=> $item_name,
 						'type'	=> $_POST['item_type'][$index],
@@ -296,7 +297,7 @@ class BillApp extends FrontendApp {
 					'price'		=> $amount,
 					'comment'	=> $comment,
 				);
-			}
+			}//}}}
 			//开始记录
 			$this->_db_begin();
 			//记录事件
