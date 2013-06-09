@@ -7,9 +7,9 @@
 <{/jsholder}>
 <div class="container row-fluid">
 	<div class="nav span6 offset1">
-		<span class="left">转账</span>
-		<span class="right">
-		</span>
+		<ul class="inline">
+			<li>添加转账</li>
+		</ul>
 	</div>
 	<div class="span5">
 	</div>
@@ -43,7 +43,7 @@
 		</div>
 		<div class="control-group">
 				<label class="control-label">日期</label>
-				<div class="controls"><input type="text" name="bill_date" value="<{$smarty.now|date_format:"%Y-%m-%d"}>" /></div>
+				<div class="controls"><input type="text" name="bill_date" value="<{if $smarty.get.bill_date}><{$smarty.get.bill_date}><{else}><{$smarty.now|date_format:"%Y-%m-%d"}><{/if}>" /></div>
 		</div>
 		<div class="control-group">
 				<label class="control-label">金额</label>

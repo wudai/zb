@@ -7,10 +7,9 @@
 <{/jsholder}>
 <div class="container row-fluid">
 	<div class="nav span8 offset1">
-		<span class="left">
-		</span>
-		<span class="right">
-		</span>
+		<ul class="inline">
+			<li>添加消费</li>
+		</ul>
 	</div>
 	<div class="span3">
 	</div>
@@ -18,7 +17,7 @@
 		<form action="" method="post" class="form-horizontal">
 		<div class="control-group">
 			<label class="control-label">日期</label>
-			<div class="controls"><input type="text" name="bill_date" value="<{$smarty.now|date_format:"%Y-%m-%d"}>" /></div>
+			<div class="controls"><input type="text" name="bill_date" value="<{if $smarty.get.bill_date}><{$smarty.get.bill_date}><{else}><{$smarty.now|date_format:"%Y-%m-%d"}><{/if}>" /></div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">地点</label>
@@ -48,10 +47,11 @@
 			</div>
 		</div>
 		<fieldset class="hidden expense_detail">
-			<legend>消费详情<small><a href="javascript:;" class="ac_expense_detail">增加</a></small></legend>
+			<legend>消费详情</legend>
 		</fieldset>
 		<div class="control-group">
 			<div class="controls">
+				<small class="hidden"><a href="javascript:;" class="ac_expense_detail">增加</a></small>
 				<button type="submit" class="btn" data-loading-text="保存中……">保存</button>
 			</div>
 		</div>
@@ -112,6 +112,7 @@ $(function() {
 	});
 	$.subscribe('click_expense_detail', function(ev){
 		$('.expense_detail').removeClass('hidden');
+		$('button[type=submit]').siblings('small').removeClass('hidden');
 		var html = [];
 		html.push('<div class="control-group"><div class="controls-row">');
 		html.push('<input name="item_name[]" placeholder="名称" class="span3"/>');
@@ -125,6 +126,7 @@ $(function() {
 		$(ev.target).parent().parent().remove();
 		if ($('.expense_detail div').length == 0) {
 			$('.expense_detail').addClass('hidden');
+		$('button[type=submit]').siblings('small').addClass('hidden');
 		}
 });
 });

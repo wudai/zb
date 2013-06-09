@@ -135,7 +135,7 @@ class BillApp extends FrontendApp {
 			}
 			$this->_db_commit();
 			$this->show_message('记录添加成功',
-				'继续添加', '/index.php?app=bill&act=transfer&tab='.$_GET['tab'].'&ou_id='.$out_id,
+				'继续添加', '/index.php?app=bill&act=transfer&tab='.$_GET['tab'].'&ou_id='.$out_id.'&bill_date='.$date,
 				'返回账户', '/index.php?app=account'
 			);
 		}
@@ -365,7 +365,7 @@ class BillApp extends FrontendApp {
 			}
 			$this->_db_commit();
 			$this->show_message('记录添加成功',
-				'继续添加', '/index.php?app=bill&act=expense',
+				'继续添加', '/index.php?app=bill&act=expense&bill_date='.$date,
 				'返回账户', '/index.php?app=account'
 			);
 		}
