@@ -289,7 +289,8 @@ class BillApp extends FrontendApp {
 						'comment' => $_POST['item_comment'][$index],
 					);
 				}
-			} else {
+			}
+			if (!$item_list) {
 				$item_list[] = array(
 					'name'		=> $comment,
 					'type'		=> 0,
