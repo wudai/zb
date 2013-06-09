@@ -6,15 +6,20 @@
 /bootstrap/datepicker/js/bootstrap-datepicker.js
 <{/jsholder}>
 <div class="container row-fluid">
-	<div class="nav span8 offset1">
-		<span class="left">
-		</span>
+	<div class="nav span6 offset1">
+		<span class="left">转账</span>
 		<span class="right">
 		</span>
 	</div>
-	<div class="span3">
+	<div class="span5">
 	</div>
-	<div class="span8 offset1">
+	<div class="span6 offset1">
+		<ul class="nav nav-tabs">
+			<li<{if $smarty.get.tab == 'out'}> class="active"<{/if}>><a href="/index.php?app=<{$app}>&act=<{$act}>&tab=out">转出</a></li>
+			<li<{if $smarty.get.tab == 'in'}> class="active"<{/if}>><a href="/index.php?app=<{$app}>&act=<{$act}>&tab=in">转入</a></li>
+			<li<{if $smarty.get.tab == 'inner'}> class="active"<{/if}>><a href="/index.php?app=<{$app}>&act=<{$act}>&tab=inner">内部账号互转</a></li>
+			<li<{if $smarty.get.tab == 'outer'}> class="active"<{/if}>><a href="/index.php?app=<{$app}>&act=<{$act}>&tab=outer">外部账号互转</a></li>
+		</ul>
 		<form action="" method="post" class="form-horizontal">
 		<div class="control-group">
 				<label class="control-label">转出账户</label>
