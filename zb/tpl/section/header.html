@@ -4,10 +4,22 @@
 <{jsholder}>
 <{/jsholder}>
 <!--header start-->
-<div class="container">
-	<ul class="nav nav-pills">
-		<li<{if $app=='default'}> class="active"<{/if}>><a href="/">首页</a></li>
-		<li<{if $app=='account'}> class="active"<{/if}>><a href="/index.php?app=account">账户</a></li>
-	</ul>
+<div class="container" id="header">
+	<div class="span2 logo offset1"><a href="/"><img src="<{'/zb/img/logo.png'|formaturl}>" alt="logo" /></a></div>
+	<div class="span6 main-nav">
+		<ul class="nav nav-pills">
+			<li<{if $app=='default'}> class="disabled"<{/if}>><a href="/">我的首页</a></li>
+			<li<{if $app=='expense'}> class="disabled"<{/if}>><a href="/index.php?app=expense">消费记录</a></li>
+			<li<{if $app=='income'}> class="disabled"<{/if}>><a href="/index.php?app=income">收入记录</a></li>
+			<li<{if $app=='account'}> class="disabled"<{/if}>><a href="/index.php?app=account">账户管理</a></li>
+			<li<{if $app=='fluid'}> class="disabled"<{/if}>><a href="/index.php?app=fluid">流水账</a></li>
+		</ul>
+	</div>
+	<div class="span2 user-nav">
+		<ul class="nav nav-pills pull-right">
+			<li class="disabled"><a href="javascript:;"><{$user.user_name}></a></li>
+			<li><a href="/index.php?act=logout">退出</a></li>
+		</ul>
+	</div>
 </div>
 <!--header end-->

@@ -16,6 +16,15 @@ class PositionModel extends  BaseModel {
 	var $_name	= 'position';
 	var $alias	= 'pos';
 
+	var $_relation = array(
+		'has_event'		=> array(
+			'model'			=> 'event',
+			'type'			=> HAS_MANY,
+			'foreign_key'	=> 'position_id',
+			'refer_key'		=> 'position_id',
+		),
+	);
+
 	function getPositionByName($q, $user_id, $limit=10) {
 		$res = $this->find(array(
 			'conditions'	=> "position_id<100000 AND position_name like '%$q%'",

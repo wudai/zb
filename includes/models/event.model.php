@@ -38,6 +38,11 @@ class EventModel extends BaseModel {
 			'foreign_key'	=> 'event_id',
 			'refer_key'		=> 'event_id',
 		),
+		'belongs_to_position'	=> array(
+			'model'			=> 'position',
+			'type'			=> BELONGS_TO,
+			'reverse'		=> 'has_event',
+		),
 	);
 
 	function getTypeList() {

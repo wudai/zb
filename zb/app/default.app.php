@@ -3,14 +3,18 @@
 class DefaultApp extends FrontendApp{
     function index() {
 		$this->login();
-		$ex_mod = &m('expense');
-		$list = $ex_mod->find(array(
-			'conditions'	=> 'user_id='.$this->_user_id,
-			//'join'			=> 'belongs_to_event',
-			'fields'		=> 'this.*',
+		$e_mod = &m('event');
+		$conditions = array(
+			'e.user_id='.$this->_user_id,
+			'type='.EventModel::TYPE_EXPENSES,
+		);
+		$list = $e_mod->find(array(
+			'conditions'	=> implode(' AND ', $conditions),
+			'join'			=> 'belongs_to_position',
+			'fields'		=> 'this.*, pos.position_name',
 			'limit'			=> 20,
 			'count'			=> true,
-			'order'			=> 'buy_date DESC, event_id DESC',
+			'order'			=> 'event_date DESC, event_id DESC',
 		));
 		$page = $this->_get_page();
 		$this->_format_page($page);
