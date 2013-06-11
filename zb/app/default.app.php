@@ -20,6 +20,19 @@ class DefaultApp extends FrontendApp{
 		$this->_format_page($page);
 		$this->assign('list', $list);
 		$this->assign('page_info', $page);
+		$cond = array(
+			'user_id='.$this->_user_id,
+			'outer_user_id=0'
+		);
+		$amod = &m('account');
+		$exmod = &m('expense');
+		$account_options = $amod->get_options(implode(' AND ', $cond), 'account_name', 'account_id', 'sort_order');
+		$expense_type_list = $exmod->getTypeList(0);
+		$this->assign(array(
+			'account_options'	=> $account_options,
+			'outer_options'		=> $outer_options,
+			'expense_type_list'	=> $expense_type_list,
+		));
         $this->display('index.html');
     }
 

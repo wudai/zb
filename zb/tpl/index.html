@@ -7,7 +7,7 @@
 <{/jsholder}>
 <div class="container row-fluid">
 	<div class="span7 offset1 form_input">
-		<ul class="inline">
+		<ul class="inline title">
 			<li>记录消费</li>
 			<li><a href="/index.php?app=bill&act=income">记录收入</a></li>
 		</ul>
@@ -27,20 +27,39 @@
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<a href="javascript:;">+添加消费明细</a>
+				<small><a href="javascript:;" class="ac_expense_detail">+添加消费明细</a></small>
 			</div>
+		</div>
+		<div class="control-group hidden acc_group">
+			<label class="control-label">支付账号</label>
+			<div class="controls">
+				<select name="account_id" class="inline"><{html_options options=$account_options}></select>
+				<select name="inter_mediate" class="inline"><option value="">通过什么账号</option><{html_options options=$account_options}></select>
+				<{*<a href="">组合支付</a>*}>
+			</div>
+		</div>
+		<div class="control-group hidden comment_group">
+			<label class="control-label">事件</label>
+			<div class="controls"><input type="text" name="comment"></div>
+		</div>
+		<div class="control-group hidden more_item">
+			<div class="controls"><small><a href="javascript:;" class="ac_add_item">+添加项目</a></small></div>
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn btn-primary" data-loading-text="保存中……">添加</button><button type="button" class="btn btn-link">取消</button>
+				<button type="submit" class="btn btn-primary" data-loading-text="保存中……">添加</button><button type="button" class="btn btn-link"><small>取消</small></button>
 			</div>
 		</div>
 		</form>
 	</div>
-	<div class="span3">
+	<div class="span4"></div>
 	</div>
+	<div class="container row-fluid">
+	<div class="span7 offset1"><h4>最近消费</h4></div>
+	<div class="span4"></div>
+	</div>
+	<div class="container row-fluid">
 	<div class="span7 offset1">
-		<div class="container"><h3>最近消费</h3></div>
 		<table class="table table-hover">
 			<tbody>
 				<{foreach $list as $line}>
@@ -48,7 +67,7 @@
 					<td><{$line.event_date}></td>
 					<td><{$line.position_name}></td>
 					<td><{$line.amount|money}>元</td>
-					<td><a href="javascript:;"><i class="icon-pencil"></i></a>&nbsp;<a href="javascript:;"><i class="icon-trash"></i></a></td>
+					<td><a href="javascript:;"><i class="icon-edit"></i></a>&nbsp;<a href="javascript:;"><i class="icon-trash"></i></a></td>
 				</tr>
 				<{/foreach}>
 			</tbody>
@@ -108,6 +127,49 @@ $(function() {
 			$('input[name="position_id"]').val(item.id);
 			return item.value;
 		}
+	});
+	$.subscribe('click_expense_detail', function(ev){
+		if ($('.acc_group').hasClass('hidden')) {
+			$('.acc_group').removeClass('hidden');
+			$('.comment_group').removeClass('hidden');
+			$('.more_item').removeClass('hidden');
+			$('.ac_expense_detail').html('-收起消费明细');
+			var html = [];
+			if ($('.item_group').length == 0) {
+				html.push('<div class="control-group item_group"><div class="control-label">项目1</div><div class="controls controls-row">');
+				html.push('<input name="item_name[]" placeholder="请输入消费项目" class="span4"/>');
+				html.push('<input name="item_price[]" placeholder="请输入价格" class="span2" />');
+				html.push('<select name="item_type[]" class="span2"><option value="0">消费类型</option><{foreach $expense_type_list as $type_id => $type_name}><option value="<{$type_id}>"><{$type_name}></option><{/foreach}></select></label>');
+				html.push('<input name="item_comment[]" placeholder="备注" class="span3" />');
+				html.push('&nbsp;<small><a href="javascript:;" class="ac_drop_detail">删除</a></small>');
+				html.push('</div></div>');
+			} else {
+				$('.item_group').show();
+			}
+			$('.comment_group').after(html.join(''));
+		} else {
+			$('.acc_group').addClass('hidden');
+			$('.comment_group').addClass('hidden');
+			$('.ac_expense_detail').html('+添加消费明细');
+			$('.item_group').hide();
+			$('.more_item').addClass('hidden');
+		}
+	}).subscribe('click_drop_detail', function(ev){
+		$(ev.target).closest('.control-group').remove();
+		$('.item_group').each(function(index){
+			$(this).children('.control-label').html('项目'+(index+1));
+		});
+	}).subscribe('click_add_item', function(ev){
+		var index = $('.item_group').length+1;
+		var html = [];
+		html.push('<div class="control-group item_group"><div class="control-label">项目'+index+'</div><div class="controls controls-row">');
+		html.push('<input name="item_name[]" placeholder="请输入消费项目" class="span4"/>');
+		html.push('<input name="item_price[]" placeholder="请输入价格" class="span2" />');
+		html.push('<select name="item_type[]" class="span2"><option value="0">消费类型</option><{foreach $expense_type_list as $type_id => $type_name}><option value="<{$type_id}>"><{$type_name}></option><{/foreach}></select></label>');
+		html.push('<input name="item_comment[]" placeholder="备注" class="span3" />');
+		html.push('&nbsp;<small><a href="javascript:;" class="ac_drop_detail">删除</a></small>');
+		html.push('</div></div>');
+		$('.more_item').before(html.join(''));
 	});
 });
 </script>
