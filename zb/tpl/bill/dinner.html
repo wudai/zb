@@ -1,0 +1,224 @@
+<{include file="section/header.html"}>
+<{cssholder}>
+/bootstrap/datepicker/css/datepicker.css
+<{/cssholder}>
+<{jsholder}>
+/bootstrap/datepicker/js/bootstrap-datepicker.js
+<{/jsholder}>
+<div class="container row-fluid">
+	<div class="nav span8 offset1">
+		<ul class="inline">
+			<li>添加聚餐账目</li>
+		</ul>
+	</div>
+	<div class="span3">
+	</div>
+	<div class="span8 offset1">
+		<form action="" method="post" class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label">日期</label>
+			<div class="controls"><input type="text" name="bill_date" value="<{if $smarty.get.bill_date}><{$smarty.get.bill_date}><{else}><{$smarty.now|date_format:"%Y-%m-%d"}><{/if}>" /></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">地点</label>
+			<div class="controls"><input type="text" name="position_name" autocomplete="off" /></div>
+			<input type="hidden" name="position_id" />
+		</div>
+		<div class="control-group">
+			<label class="control-label">事件</label>
+			<div class="controls"><input type="text" name="comment"></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">总金额</label>
+			<div class="controls"><input type="text" name="amount" /></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">支付账号</label>
+			<div class="controls">
+				<select name="account_id" class="inline"><{html_options options=$account_options}></select>
+				<label class="inline checkbox"><input type="checkbox" name="use_inter_mediate" />通过账号：</label>
+				<select name="inter_mediate" class="inline"><option value="">请选择</option><{html_options options=$account_options}></select>
+				<{*<a href="">组合支付</a>*}>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">成员</label>
+			<div class="controls controls-row">
+				<input type="text" class="input-medium search-query" /><button type="button" class="btn ac_add_consumer">添加</button>
+				<button type="button" class="btn btn-link ac_detail">记录明细</button>
+				<input type="hidden" name="query_id" />
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls controls-row" id="consumers">
+				<input type="hidden" id="consumer_self" name="consumer[]" value="self" />
+				<div class="btn btn-link"><span>自己</span><i class="icon-remove ac_remove_consumer" consumer_id="self"></i></div>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn" data-loading-text="保存中……">保存</button>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
+<{scriptholder}>
+<script>
+$(function() {
+	$('input[name=bill_date]').datepicker({format: 'yyyy-mm-dd'});
+	$('input[name=position_name]').typeahead({
+		minChars:2,
+		source: function(request,response){
+			$('input[name=position_id]').val('');
+			$.ajax({
+				url: '/index.php?app=position&act=ajax_get',
+				dataType: 'json',
+				data:{
+					q : request,
+				},
+				success:function(data){
+					if(data.data) {
+						var resultList = Array();
+						resultList = data.data.map(function (item) {
+							var aItem = { id: item.id, value: item.value};
+							return JSON.stringify(aItem);
+						});
+						return response(resultList);
+					}
+				},
+			});
+		},
+		matcher: function (obj) {
+			return true;
+		},
+		sorter: function (items) {          
+			var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+			while (aItem = items.shift()) {
+				var item = JSON.parse(aItem);
+				if (!item.value.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+				else if (item.value.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+				else caseInsensitive.push(JSON.stringify(item));
+			}
+			return beginswith.concat(caseSensitive, caseInsensitive)
+		},
+		highlighter: function (obj) {
+			var item = JSON.parse(obj);
+			var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+			return item.value.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+				return '<strong>' + match + '</strong>'
+			})
+		},
+		updater: function (obj) {
+			var item = JSON.parse(obj);
+			$('input[name="position_id"]').val(item.id);
+			return item.value;
+		}
+	});
+	$('input.search-query').typeahead({
+		minChars:1,
+		source: function(request,response){
+			$('input[name=query_id]').val('');
+			$.ajax({
+				url: '/index.php?app=bill&act=ajax_getconsumer',
+				dataType: 'json',
+				data:{
+					q : request,
+				},
+				success:function(data){
+					if(data.data) {
+						var resultList = Array();
+						resultList = data.data.map(function (item) {
+							var aItem = { id: item.id, value: item.value};
+							return JSON.stringify(aItem);
+						});
+						return response(resultList);
+					}
+				},
+			});
+		},
+		matcher: function (obj) {
+			return true;
+		},
+		sorter: function (items) {          
+			var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+			while (aItem = items.shift()) {
+				var item = JSON.parse(aItem);
+				if (!item.value.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+				else if (item.value.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+				else caseInsensitive.push(JSON.stringify(item));
+			}
+			return beginswith.concat(caseSensitive, caseInsensitive)
+		},
+		highlighter: function (obj) {
+			var item = JSON.parse(obj);
+			var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+			return item.value.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+				return '<strong>' + match + '</strong>'
+			})
+		},
+		updater: function (obj) {
+			var item = JSON.parse(obj);
+			$('input[name="query_id"]').val(item.id);
+			return item.value;
+		}
+	});
+	$.subscribe('click_add_consumer', function(ev){
+		var html = [];
+		consumer_id = $('input[name=query_id]').val();
+		consumer_name = $('input.search-query').val();
+		if (typeof(consumer_id) != undefined && consumer_id > 0) {
+			if ($('.consumer_details').length > 0) {
+				html.push('<div class="control-group consumer_details"><div class="controls controls-row">');
+				html.push('<input class="span2" type="text" value="'+consumer_name+'" readonly="readonly" />');
+				html.push('<input class="span2" type="text" name="consumer_amount[]" value="" placeholder="请输入金额" />');
+				html.push('<input class="span3" type="text" name="consumer_comment[]" value="" placeholder="备注" />');
+				html.push('<input type="hidden" name="consumer[]" value="'+consumer_id+'" placeholder="请输入金额" />');
+				html.push('<button type="button" class="btn btn-link ac_remove_detail">删除</button>');
+				html.push('</div></div>');
+				$('.consumer_details').last().after(html.join(''));
+			} else {
+				html.push('<input type="hidden" id="consumer_'+consumer_id+'" name="consumer[]" value="'+consumer_id+'" />');
+				html.push('<div class="btn btn-link"><span>'+consumer_name+'</span><i class="icon-remove ac_remove_consumer" consumer_id="'+consumer_id+'"></i></div>');
+				$('#consumers').append(html.join(''));
+			}
+			$('input[name=query_id]').val('');
+			$('input.search-query').val('');
+		}
+	}).subscribe('click_remove_consumer', function(ev){
+		consumer_id = $(ev.target).attr('consumer_id');
+		$(ev.target).parent().remove();
+		$('#consumer_'+consumer_id).remove();
+	}).subscribe('click_detail', function(ev){
+		if ($('.consumer_details').length > 0) {
+			var html = [];
+			$('.consumer_details').each(function(index){
+				$this = $(this);
+				consumer_id = $this.find('input[type=hidden]').val();
+				consumer_name = $this.find('input[readonly=readonly]').val();
+				html.push('<input type="hidden" id="consumer_'+consumer_id+'" name="consumer[]" value="'+consumer_id+'" />');
+				html.push('<div class="btn btn-link"><span>'+consumer_name+'</span><i class="icon-remove ac_remove_consumer" consumer_id="'+consumer_id+'"></i></div>');
+			});
+			$('#consumers').append(html.join('')).parent().show();
+			$('.consumer_details').remove();
+		} else {
+			var html = [];
+			$('#consumers .btn').each(function(index){
+				$this = $(this);
+				html.push('<div class="control-group consumer_details"><div class="controls controls-row">');
+				html.push('<input class="span2" type="text" value="'+$this.children('span').html()+'" readonly="readonly" />');
+				html.push('<input class="span2" type="text" name="consumer_amount[]" value="" placeholder="请输入金额" />');
+				html.push('<input class="span3" type="text" name="consumer_comment[]" value="" placeholder="备注" />');
+				html.push('<input type="hidden" name="consumer[]" value="'+$this.children('i').attr('consumer_id')+'" placeholder="请输入金额" />');
+				html.push('<button type="button" class="btn btn-link ac_remove_detail">删除</button>');
+				html.push('</div></div>');
+			});
+			$('#consumers').empty().parent().hide().after(html.join(''));
+		}
+	}).subscribe('click_remove_detail', function(ev){
+		$(ev.target).parent().parent().remove();
+	})
+});
+</script>
+<{/scriptholder}>
+<{include file="section/footer.html"}>

@@ -47,7 +47,7 @@
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn btn-primary" data-loading-text="保存中……">添加</button><button type="button" class="btn btn-link"><small>取消</small></button>
+				<button type="submit" class="btn btn-primary" data-loading-text="保存中……">添加</button><button type="reset" class="btn btn-link ac_clear"><small>取消</small></button>
 			</div>
 		</div>
 		</form>
@@ -170,6 +170,8 @@ $(function() {
 		html.push('&nbsp;<small><a href="javascript:;" class="ac_drop_detail">删除</a></small>');
 		html.push('</div></div>');
 		$('.more_item').before(html.join(''));
+	}).subscribe('click_clear', function(ev){
+		$('.item_group').remove();
 	});
 });
 </script>
