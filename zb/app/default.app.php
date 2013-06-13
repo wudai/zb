@@ -36,6 +36,36 @@ class DefaultApp extends FrontendApp{
         $this->display('index.html');
     }
 
+	function income() {
+		$this->login();
+		$e_mod = &m('event');
+		$conditions = array(
+			'e.user_id='.$this->_user_id,
+			'type='.EventModel::TYPE_INCOME,
+		);
+		$list = $e_mod->find(array(
+			'conditions'	=> implode(' AND ', $conditions),
+			'limit'			=> 20,
+			'count'			=> true,
+			'order'			=> 'event_date DESC, event_id DESC',
+		));
+		$page = $this->_get_page();
+		$this->_format_page($page);
+		$this->assign('list', $list);
+		$this->assign('page_info', $page);
+		$cond = array(
+			'user_id='.$this->_user_id,
+			'outer_user_id=0'
+		);
+		$amod = &m('account');
+		$account_options = $amod->get_options(implode(' AND ', $cond), 'account_name', 'account_id', 'sort_order');
+		$this->assign(array(
+			'account_options'	=> $account_options,
+			'outer_options'		=> $outer_options,
+		));
+        $this->display('income.html');
+	}
+
 	function register() {
 		$user_name = trim($_POST['user_name']);
 		$password = trim($_POST['password']);

@@ -356,7 +356,7 @@ class BillApp extends FrontendApp {
 				}
 				if ($account['amount'] > 0) {
 					$account_data = array(
-						'income'	=> $account_infos[$account['account_id']]['expense'] + $account['amount'],
+						'income'	=> $account_infos[$account['account_id']]['income'] + $account['amount'],
 						'balance'	=> $account_infos[$account['account_id']]['balance'] + $account['amount'],
 					);
 				} else {
@@ -389,8 +389,84 @@ class BillApp extends FrontendApp {
 			}
 			$this->_db_commit();
 			$this->show_message('记录添加成功',
-				'继续添加', '/index.php?app=bill&act=expense&bill_date='.$date,
-				'返回账户', '/index.php?app=account'
+				'返回首页', '/index.php'
+			);
+		}
+	}
+	//}}}
+	
+	//{{{ 收入操作
+	function income() {
+		if (!IS_POST) {
+			$cond = array(
+				'user_id='.$this->_user_id,
+				'outer_user_id=0'
+			);
+			$account_options = $this->_amod->get_options(implode(' AND ', $cond), 'account_name', 'account_id', 'sort_order');
+			$this->assign(array(
+				'account_options'	=> $account_options,
+			));
+			$this->display('bill/expense.html');
+		} else {
+			$date = $_POST['bill_date'];
+			$amount = $_POST['amount'];
+			if (!check_money($amount)) {
+				$this->show_warning('请填写正确的金额');
+			}
+			$comment = trim($_POST['comment']);
+			if (!strlen($comment)) {
+				$this->show_warning('请填写事件');
+			}
+			//{{{收入账号处理
+			$account_id = intval($_POST['account_id']);
+			if ($account_id <= 0) {
+				$this->show_warning('请选择收入账号');
+			}
+			$account = $this->_amod->getById($this->_user_id, $account_id);
+			if (!$account || $account['outer_user_id'] != 0) {
+				$this->show_warning('请选择收入账号');
+			}
+			//}}}
+			//开始记录
+			$this->_db_begin();
+			//记录事件
+			$event_data = array(
+				'user_id'		=> $this->_user_id,
+				'type'			=> EventModel::TYPE_INCOME,
+				'amount'		=> $amount,
+				'event_date'	=> $date,
+				'create_time'	=> TIME,
+				'comment'		=> $comment,
+			);
+			$event_id = $this->_emod->add($event_data);
+			if (!$event_id) {
+				$this->show_warning('消费事件记录失败');
+			}
+			//记录收入详情和处理账户余额
+			$event_account_data = array(
+				'event_id'			=> $event_id,
+				'account_id'		=> $account_id,
+				'type'				=> Event_accountModel::TYPE_INCOME,
+				'amount'			=> $amount,
+				'comment'			=> $comment,
+				'event_date'		=> $date,
+			);
+			$event_account_id = $this->_eamod->add($event_account_data);
+			if (!$event_account_id) {
+				$this->_db_rollback();
+				$this->show_warning('收入详细记录失败');
+			}
+			$account_data = array(
+				'income'	=> $account['income'] + $amount,
+				'balance'	=> $account['balance'] + $amount,
+			);
+			if (!$this->_amod->edit($account_id, $account_data)) {
+				$this->_db_rollback();
+				$this->show_warning('收入账户余额变更失败');
+			}
+			$this->_db_commit();
+			$this->show_message('记录添加成功',
+				'返回首页', '/index.php?act=income'
 			);
 		}
 	}

@@ -1,0 +1,71 @@
+<{include file="section/header.html"}>
+<{cssholder}>
+/bootstrap/datepicker/css/datepicker.css
+<{/cssholder}>
+<{jsholder}>
+/bootstrap/datepicker/js/bootstrap-datepicker.js
+<{/jsholder}>
+<div class="container row-fluid">
+	<div class="span7 offset1 form_input">
+		<ul class="inline title">
+			<li><a href="/index.php">记录消费</a></li>
+			<li>记录收入</li>
+		</ul>
+		<form action="/index.php?app=bill&act=income" method="post" class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label">时间</label>
+			<div class="controls"><input type="text" name="bill_date" value="<{if $smarty.get.bill_date}><{$smarty.get.bill_date}><{else}><{$smarty.now|date_format:"%Y-%m-%d"}><{/if}>" /></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">金额</label>
+			<div class="controls"><input type="text" name="amount" /></div>
+		</div>
+		<div class="control-group acc_group">
+			<label class="control-label">收入账号</label>
+			<div class="controls">
+				<select name="account_id"><{html_options options=$account_options}></select>
+			</div>
+		</div>
+		<div class="control-group comment_group">
+			<label class="control-label">事件</label>
+			<div class="controls"><input type="text" name="comment"></div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" class="btn btn-primary" data-loading-text="保存中……">添加</button><button type="button" class="btn btn-link"><small>取消</small></button>
+			</div>
+		</div>
+		</form>
+	</div>
+	<div class="span4"></div>
+	</div>
+	<div class="container row-fluid">
+	<div class="span7 offset1"><h4>最近收入</h4></div>
+	<div class="span4"></div>
+	</div>
+	<div class="container row-fluid">
+	<div class="span7 offset1">
+		<table class="table table-hover">
+			<tbody>
+				<{foreach $list as $line}>
+				<tr>
+					<td><{$line.event_date}></td>
+					<td><{$line.comment}></td>
+					<td><{$line.amount|money}>元</td>
+					<td><a href="javascript:;"><i class="icon-edit"></i></a>&nbsp;<a href="javascript:;"><i class="icon-trash"></i></a></td>
+				</tr>
+				<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+	<div class="span4">
+	</div>
+</div>
+<{scriptholder}>
+<script>
+$(function() {
+	$('input[name=bill_date]').datepicker({format: 'yyyy-mm-dd'});
+});
+</script>
+<{/scriptholder}>
+<{include file="section/footer.html"}>
