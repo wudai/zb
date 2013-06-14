@@ -695,7 +695,7 @@ class BillApp extends FrontendApp {
 			$event_data = array(
 				'user_id'		=> $this->_user_id,
 				'position_id'	=> $position_id,
-				'type'			=> EventModel::TYPE_EXPENSES,
+				'type'			=> $expense_data ? EventModel::TYPE_EXPENSES : EventModel::TYPE_DINNER,
 				'amount'		=> $expense_data['amount'],
 				'event_date'	=> $date,
 				'create_time'	=> TIME,
