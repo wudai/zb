@@ -719,7 +719,7 @@ class BillApp extends FrontendApp {
 					'account_id'		=> $account['account_id'],
 					'type'				=> $account['type'],
 					'amount'			=> $account['amount'],
-					'comment'			=> $account['comment'],
+					'comment'			=> $account['comment'] ? $account['comment'] : $comment,
 					'extra'				=> $account['extra'],
 					'event_date'		=> $date,
 				);
