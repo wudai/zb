@@ -213,9 +213,11 @@ class BillApp extends FrontendApp {
 				$this->show_warning('请填写正确的金额');
 			}
 			$comment = trim($_POST['comment']);
+			/*
 			if (!strlen($comment)) {
-				$this->show_warning('请填写事由');
+				$this->show_warning('请填写事件');
 			}
+			 */
 			//{{{支付账号处理
 			$account_list = array();
 			if (!is_array($_POST['account_id'])) {
@@ -521,7 +523,7 @@ class BillApp extends FrontendApp {
 			}
 			$comment = trim($_POST['comment']);
 			if (!strlen($comment)) {
-				$this->show_warning('请填写事由');
+				$this->show_warning('请填写事件');
 			}
 			//{{{支付账号处理
 			$account_list = array();
