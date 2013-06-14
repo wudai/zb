@@ -518,6 +518,12 @@ class BillApp extends FrontendApp {
 				$this->show_warning('请填写地点');
 			}
 			$amount = $_POST['amount'];
+			if (!$amount && $_POST['consumer_amount']) {
+				$amount = array_sum($_POST['consumer_amount']);
+			}
+			if (!check_money($amount)) {
+				$this->show_warning('请填写正确的金额');
+			}
 			$comment = trim($_POST['comment']);
 			if (!strlen($comment)) {
 				$this->show_warning('请填写事件');
@@ -638,15 +644,10 @@ class BillApp extends FrontendApp {
 						$tmp_amount += $_POST['consumer_amount'][$index];
 					}
 				}
-				if (!$amount) {
-					$amount = $tmp_amount;
-				} elseif ($tmp_amount != $amount) {
+				if ($tmp_amount != $amount) {
 					$this->show_warning('金额总数和明细不对应');
 				}
 			} else {
-				if (!check_money($amount)) {
-					$this->show_warning('请填写正确的金额');
-				}
 				$user_count = count($_POST['consumer']);
 				$average = round($amount / $user_count, 2);
 				if (in_array('self', $_POST['consumer'])) {
