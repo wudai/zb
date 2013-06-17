@@ -1,7 +1,4 @@
 <?php
-/**
- * 用于更新频道页数据的定时脚本 
- */
 ini_set('memory_limit', '-1');
 date_default_timezone_set('PRC');//时区
 require(dirname(__FILE__).'/../config/zb_config.inc.php');//依环境不同的配置文件
