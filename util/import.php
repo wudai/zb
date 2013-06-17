@@ -73,6 +73,7 @@ while (!feof($file)) {
 				'event_date'		=> $date,
 				'comment'			=> $matches[2],
 				'extra'				=> $target[1],
+				'zb_id'				=> $e_id,
 			);
 			if (!$eamod->add($out_data)) {
 				cron_log(CRON_NAME, "out_out failed\t$line");
@@ -87,6 +88,7 @@ while (!feof($file)) {
 				'event_date'		=> $date,
 				'comment'			=> $matches[2],
 				'extra'				=> $account_id,
+				'zb_id'				=> $e_id,
 			);
 			if (!$eamod->add($in_data)) {
 				cron_log(CRON_NAME, "out_in failed\t$line");
@@ -124,6 +126,7 @@ while (!feof($file)) {
 				'event_date'		=> $date,
 				'comment'			=> $matches[2],
 				'extra'				=> $target[1],
+				'zb_id'				=> $e_id,
 			);
 			if (!$eamod->add($in_data)) {
 				cron_log(CRON_NAME, "in_in failed\t$line");
@@ -138,6 +141,7 @@ while (!feof($file)) {
 				'event_date'		=> $date,
 				'comment'			=> $matches[2],
 				'extra'				=> $account_id,
+				'zb_id'				=> $e_id,
 			);
 			if (!$eamod->add($out_data)) {
 				cron_log(CRON_NAME, "in_out failed\t$line");
