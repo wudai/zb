@@ -41,7 +41,7 @@ $accounts = array(
 	'华联储值卡' => array(0,50),
 	'我的现金' => array(0,1),
 );
-$account_id = 4;
+$account_id = 13;
 while (!feof($file)) {
 	$line = trim(fgets($file));
 	if (!$line) break;
