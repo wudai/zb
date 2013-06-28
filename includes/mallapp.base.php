@@ -267,13 +267,14 @@ class MallBaseApp extends BaseApp
         */
 
         /* 生成app=goods&act=view之类的URL */
-        if (preg_match('/[&|\?]p=\w+$/i', $_SERVER['QUERY_STRING']) > 0)
+		$query_string = str_replace('#38;', '', $_SERVER['QUERY_STRING']);
+        if (preg_match('/[&|\?]p=\w+$/i', $query_string) > 0)
         {
-            $url_format = preg_replace('/[&|\?]p=\w+$/i', '', $_SERVER['QUERY_STRING']);
+            $url_format = preg_replace('/[&|\?]p=\w+$/i', '', $query_string);
         }
         else
         {
-            $url_format = $_SERVER['QUERY_STRING'];
+            $url_format = $query_string;
         }
 
         $page['page_links'] = array();
