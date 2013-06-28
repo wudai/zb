@@ -22,7 +22,13 @@
 			<li><a href="/index.php?app=account">个人账户</a> <span class="divider">&gt;</span></li>
 			<li class="active"><{$info.account_name}></li>
 		</ul>
-		<span class="inline">累计支出<em class="text-info"><{$info.expense|money}></em>, 累计收入<em class="text-info"><{$info.income|money}></em>, 当前余额<em class="<{if $info.balance > 0}>text-success<{else}>text-error<{/if}>"><{$info.balance|money}></em></span>
+		<span class="inline">
+			<{if $filtered}>
+			周期内累计支出<em class="text-info"><{$expense|money}></em>, 累计收入<em class="text-info"><{$income|money}></em>, 收支总计<em class="<{if $balance > 0}>text-success<{else}>text-error<{/if}>"><{$balance|money}></em>
+			<{else}>
+			累计支出<em class="text-info"><{$info.expense|money}></em>, 累计收入<em class="text-info"><{$info.income|money}></em>, 当前余额<em class="<{if $info.balance > 0}>text-success<{else}>text-error<{/if}>"><{$info.balance|money}></em>
+			<{/if}>
+		</span>
 		<span class="pull-right">
 			<form method="get" class="form-inline">
 			<input type="hidden" name="app" value="account" />
@@ -31,7 +37,7 @@
 			<input type="text" class="input-small" placeholder="开始日期" name="start_date" value="<{$smarty.get.start_date}>" />
 			<input type="text" class="input-small" placeholder="截止日期" name="end_date" value="<{$smarty.get.end_date}>" />
 			<button type="submit" class="btn">筛选</button>
-			<{if $smarty.get.start_date || $smarty.get.end_date}><a href="/index.php?app=account&act=outdetail&ou_id=<{$info.outer_user_id}>">取消筛选</a><{/if}>
+			<{if $filtered}><a href="/index.php?app=account&act=detail&id=<{$info.account_id}>">取消筛选</a><{/if}>
 			</form>
 		</span>
 		<table class="table table-striped table-hover">

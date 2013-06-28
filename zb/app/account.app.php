@@ -290,6 +290,7 @@ class AccountApp extends FrontendApp {
 		if ($_GET['end_date']) {
 			$conditions[] = "ea.event_date<='". $_GET['end_date']."'";
 		}
+		$filtered = (boolean)count($conditions > 1);
 		$page = $this->_get_page();
 		$list = $this->_eamod->find(array(
 			'conditions'	=> implode(' AND ', $conditions),
@@ -299,10 +300,27 @@ class AccountApp extends FrontendApp {
 			'order'			=> 'ea.event_date DESC, id DESC',
 		));
 		$page['item_count'] = $this->_eamod->getCount();
+		$assign = array(
+			'info'		=> $info,
+			'list'		=> $list,
+			'page_info'	=> $page,
+			'filtered'	=> $filtered,
+		);
+		if ($filtered) {
+			$balance = $this->_eamod->getSum(array(
+				'conditions'	=> implode(' AND ', $conditions),
+			), 'amount');
+			$conditions[] = 'ea.amount>0';
+			$income = $this->_eamod->getSum(array(
+				'conditions'	=> implode(' AND ', $conditions),
+			), 'amount');
+			$expense = $income - $balance;
+			$assign['balance'] = $balance;
+			$assign['income'] = $income;
+			$assign['expense'] = $expense;
+		}
 		$this->_format_page($page);
-		$this->assign('info', $info);
-		$this->assign('list', $list);
-		$this->assign('page_info', $page);
+		$this->assign($assign);
 		$this->display('account/detail.html');
 	}
 
@@ -334,6 +352,7 @@ class AccountApp extends FrontendApp {
 		if ($_GET['end_date']) {
 			$conditions[] = "ea.event_date<='". $_GET['end_date']."'";
 		}
+		$filtered = (boolean) (count($conditions) > 1);
 		$page = $this->_get_page();
 		$list = $this->_eamod->find(array(
 			'conditions'	=> implode(' AND ', $conditions),
@@ -343,11 +362,28 @@ class AccountApp extends FrontendApp {
 			'order'			=> 'ea.event_date DESC, id DESC',
 		));
 		$page['item_count'] = $this->_eamod->getCount();
+		$assign = array(
+			'info'		=> $info,
+			'list'		=> $list,
+			'page_info'	=> $page,
+			'accounts'	=> $accounts,
+			'filtered'	=> $filtered,
+		);
+		if ($filtered) {
+			$balance = $this->_eamod->getSum(array(
+				'conditions'	=> implode(' AND ', $conditions),
+			), 'amount');
+			$conditions[] = 'ea.amount>0';
+			$income = $this->_eamod->getSum(array(
+				'conditions'	=> implode(' AND ', $conditions),
+			), 'amount');
+			$expense = $income - $balance;
+			$assign['balance'] = $balance;
+			$assign['income'] = $income;
+			$assign['expense'] = $expense;
+		}
 		$this->_format_page($page);
-		$this->assign('info', $info);
-		$this->assign('accounts', $accounts);
-		$this->assign('list', $list);
-		$this->assign('page_info', $page);
+		$this->assign($assign);
 		$this->display('account/outdetail.html');
 	}
 
