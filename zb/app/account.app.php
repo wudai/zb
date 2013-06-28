@@ -285,20 +285,20 @@ class AccountApp extends FrontendApp {
 			'account_id='.$account_id,
 		);
 		if ($_GET['start_date']) {
-			$conditions[] = "ea.event_date>=". $_GET['start_date'];
+			$conditions[] = "ea.event_date>='". $_GET['start_date']."'";
 		}
 		if ($_GET['end_date']) {
-			$conditions[] = "ea.event_date<=". $_GET['end_date'];
+			$conditions[] = "ea.event_date<='". $_GET['end_date']."'";
 		}
+		$page = $this->_get_page();
 		$list = $this->_eamod->find(array(
-			'conditions'	=> 'account_id='.$account_id,
-			//'join'			=> 'belongs_to_event',
+			'conditions'	=> implode(' AND ', $conditions),
 			'fields'		=> 'this.*',
 			'limit'			=> $page['limit'],
 			'count'			=> true,
 			'order'			=> 'ea.event_date DESC, id DESC',
 		));
-		$page = $this->_get_page();
+		$page['item_count'] = $this->_eamod->getCount();
 		$this->_format_page($page);
 		$this->assign('info', $info);
 		$this->assign('list', $list);
@@ -329,11 +329,12 @@ class AccountApp extends FrontendApp {
 			db_create_in(array_keys($accounts), 'account_id'),
 		);
 		if ($_GET['start_date']) {
-			$conditions[] = "ea.event_date>=". $_GET['start_date'];
+			$conditions[] = "ea.event_date>='". $_GET['start_date']."'";
 		}
 		if ($_GET['end_date']) {
-			$conditions[] = "ea.event_date<=". $_GET['end_date'];
+			$conditions[] = "ea.event_date<='". $_GET['end_date']."'";
 		}
+		$page = $this->_get_page();
 		$list = $this->_eamod->find(array(
 			'conditions'	=> implode(' AND ', $conditions),
 			'fields'		=> 'this.*',
@@ -341,7 +342,7 @@ class AccountApp extends FrontendApp {
 			'count'			=> true,
 			'order'			=> 'ea.event_date DESC, id DESC',
 		));
-		$page = $this->_get_page();
+		$page['item_count'] = $this->_eamod->getCount();
 		$this->_format_page($page);
 		$this->assign('info', $info);
 		$this->assign('accounts', $accounts);

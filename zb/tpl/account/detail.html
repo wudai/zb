@@ -1,4 +1,10 @@
 <{include file="section/header.html"}>
+<{cssholder}>
+/bootstrap/datepicker/css/datepicker.css
+<{/cssholder}>
+<{jsholder}>
+/bootstrap/datepicker/js/bootstrap-datepicker.js
+<{/jsholder}>
 <div class="container row-fluid">
 	<div class="nav span8 offset1">
 		<ul class="inline">
@@ -16,7 +22,18 @@
 			<li><a href="/index.php?app=account">个人账户</a> <span class="divider">&gt;</span></li>
 			<li class="active"><{$info.account_name}></li>
 		</ul>
-		<p>累计支出<em class="text-info"><{$info.expense|money}></em>, 累计收入<em class="text-info"><{$info.income|money}></em>, 当前余额<em class="<{if $info.balance > 0}>text-success<{else}>text-error<{/if}>"><{$info.balance|money}></em></p>
+		<span class="inline">累计支出<em class="text-info"><{$info.expense|money}></em>, 累计收入<em class="text-info"><{$info.income|money}></em>, 当前余额<em class="<{if $info.balance > 0}>text-success<{else}>text-error<{/if}>"><{$info.balance|money}></em></span>
+		<span class="pull-right">
+			<form method="get" class="form-inline">
+			<input type="hidden" name="app" value="account" />
+			<input type="hidden" name="act" value="detail" />
+			<input type="hidden" name="id" value="<{$info.account_id}>" />
+			<input type="text" class="input-small" placeholder="开始日期" name="start_date" value="<{$smarty.get.start_date}>" />
+			<input type="text" class="input-small" placeholder="截止日期" name="end_date" value="<{$smarty.get.end_date}>" />
+			<button type="submit" class="btn">筛选</button>
+			<{if $smarty.get.start_date || $smarty.get.end_date}><a href="/index.php?app=account&act=outdetail&ou_id=<{$info.outer_user_id}>">取消筛选</a><{/if}>
+			</form>
+		</span>
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr><th>日期</th><th>类型</th><th>金额</th><th>事件</th></tr>
@@ -42,4 +59,12 @@
 		<{include file="pagination.html"}>
 	</div>
 </div>
+<{scriptholder}>
+<script>
+$(function() {
+	$('input[name=start_date]').datepicker({format: 'yyyy-mm-dd'});
+	$('input[name=end_date]').datepicker({format: 'yyyy-mm-dd'});
+});
+</script>
+<{/scriptholder}>
 <{include file="section/footer.html"}>

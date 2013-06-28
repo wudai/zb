@@ -772,38 +772,6 @@
 			});
 			return false;
 		},
-		exercise:function(message,options){
-			var options=$.extend({
-				onClose:function(){
-					if(!/\/exercise\/start/.test(document.getElementById('exerciseFrame').contentWindow.location.href)){
-						if(confirm('您正在做题，确认退出么？')){
-							if(/type=challenge/.test(document.getElementById('exerciseFrame').contentWindow.location.href)){
-								$.getJSON('/ajax/json/fight/close')
-							}
-							$(window).unbind('beforeunload')
-							return true;
-						}else{
-							return false;
-						}
-					}else{
-						$(window).unbind('beforeunload')
-						return true;
-					}
-				},
-				onInit:function(){
-					$(document.getElementById('exerciseFrame').contentWindow).load(function() {
-						$(window).bind('beforeunload',function(){
-							return '您正在做题，确认退出么？'
-						})
-					});
-				}
-			}, options);
-			$.subscribe('exercise_done',function(){
-				$(window).unbind('beforeunload');
-				window.location.reload()
-			})
-			return $.dialog(message,options)
-		},
         
         mask: function(options){
 			var options = $.extend({
