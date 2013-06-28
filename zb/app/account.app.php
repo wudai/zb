@@ -300,6 +300,7 @@ class AccountApp extends FrontendApp {
 			'order'			=> 'ea.event_date DESC, id DESC',
 		));
 		$page['item_count'] = $this->_eamod->getCount();
+		$this->_format_page($page);
 		$assign = array(
 			'info'		=> $info,
 			'list'		=> $list,
@@ -319,7 +320,6 @@ class AccountApp extends FrontendApp {
 			$assign['income'] = $income;
 			$assign['expense'] = $expense;
 		}
-		$this->_format_page($page);
 		$this->assign($assign);
 		$this->display('account/detail.html');
 	}
@@ -362,6 +362,7 @@ class AccountApp extends FrontendApp {
 			'order'			=> 'ea.event_date DESC, id DESC',
 		));
 		$page['item_count'] = $this->_eamod->getCount();
+		$this->_format_page($page);
 		$assign = array(
 			'info'		=> $info,
 			'list'		=> $list,
@@ -382,7 +383,6 @@ class AccountApp extends FrontendApp {
 			$assign['income'] = $income;
 			$assign['expense'] = $expense;
 		}
-		$this->_format_page($page);
 		$this->assign($assign);
 		$this->display('account/outdetail.html');
 	}
