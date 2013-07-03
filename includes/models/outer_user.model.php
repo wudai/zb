@@ -46,4 +46,14 @@ class Outer_userModel extends BaseModel {
 		}
 		return $res;
 	}
+
+	function auth($password) {
+		$info = $this->get(array(
+			'conditions' => "password = '$password'",
+		));
+		if (!$info) {
+			$this->_error('密码不正确');
+		}
+		return $info;
+	}
 }

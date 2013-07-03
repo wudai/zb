@@ -17,8 +17,12 @@
 	</div>
 	<div class="span2 user-nav">
 		<ul class="nav nav-pills pull-right">
+			<{if $user.user_id}>
 			<li class="disabled"><a href="javascript:;"><{$user.user_name}></a></li>
 			<li><a href="/index.php?act=logout">退出</a></li>
+			<{else}>
+			<li><a href="/index.php?act=login">登录</a></li>
+			<{/if}>
 		</ul>
 	</div>
 </div>

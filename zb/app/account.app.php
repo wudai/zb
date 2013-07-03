@@ -399,4 +399,23 @@ class AccountApp extends FrontendApp {
 		}
 		$this->json_out(0, '', $data);
 	}
+
+	function makeoutpass() {
+		$ou_id = intval($_GET['ou_id']);
+		if ($ou_id <= 0) {
+			$this->show_warning('外债用户不存在');
+		}
+		$info = $this->_oumod->get_info($ou_id);
+		if (!$info || $info['user_id'] != $this->_user_id) {
+			$this->show_warning('账号不存在');
+		}
+		if (!$info['password']) {
+			while (true) {
+				$password = uniqid();
+				if (!$exists = $this->_oumod->get(array('conditions' => "password='$password'"))) break;
+			}
+			$this->_oumod->edit($ou_id, array('password' => $password));
+		}
+		location('/index.php?app=account&act=outdetail&ou_id='.$ou_id);
+	}
 }

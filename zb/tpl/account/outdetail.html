@@ -23,24 +23,36 @@
 			<li><a href="/index.php?app=account&act=out">外债账户</a> <span class="divider">&gt;</span></li>
 			<li class="active"><{$info.user_name}></li>
 		</ul>
-		<span class="inline">
-			<{if $filtered}>
-			周期内累计借款<em class="text-info"><{$income|money}></em>, 累计还款<em class="text-info"><{$expense|money}></em>, 周期内总计欠款<em class="<{if $balance > 0}>text-error<{else}>text-success<{/if}>"><{$balance|money}></em>
-			<{else}>
-			累计借出<em class="text-info"><{$info.income|money}></em>, 累计还入<em class="text-info"><{$info.expense|money}></em>, 当前欠款<em class="<{if $info.balance > 0}>text-error<{else}>text-success<{/if}>"><{$info.balance|money}></em>
-			<{/if}>
-		</span>
-		<span class="pull-right">
-			<form method="get" class="form-inline">
-			<input type="hidden" name="app" value="account" />
-			<input type="hidden" name="act" value="outdetail" />
-			<input type="hidden" name="ou_id" value="<{$info.outer_user_id}>" />
-			<input type="text" class="input-small" placeholder="开始日期" name="start_date" value="<{$smarty.get.start_date}>" />
-			<input type="text" class="input-small" placeholder="截止日期" name="end_date" value="<{$smarty.get.end_date}>" />
-			<button type="submit" class="btn">筛选</button>
-			<{if $filtered}><a href="/index.php?app=account&act=outdetail&ou_id=<{$info.outer_user_id}>">取消筛选</a><{/if}>
-			</form>
-		</span>
+		<div class="row-fluid">
+			<div class="span6">
+				<{if $filtered}>
+				周期内累计借款<em class="text-info"><{$income|money}></em>, 累计还款<em class="text-info"><{$expense|money}></em>, 周期内总计欠款<em class="<{if $balance > 0}>text-error<{else}>text-success<{/if}>"><{$balance|money}></em>
+				<{else}>
+				累计借出<em class="text-info"><{$info.income|money}></em>, 累计还入<em class="text-info"><{$info.expense|money}></em>, 当前欠款<em class="<{if $info.balance > 0}>text-error<{else}>text-success<{/if}>"><{$info.balance|money}></em>
+				<{/if}>
+			</div>
+			<div class="span6 text-right">
+				<form method="get" class="form-inline">
+				<input type="hidden" name="app" value="account" />
+				<input type="hidden" name="act" value="outdetail" />
+				<input type="hidden" name="ou_id" value="<{$info.outer_user_id}>" />
+				<input type="text" class="input-small" placeholder="开始日期" name="start_date" value="<{$smarty.get.start_date}>" />
+				<input type="text" class="input-small" placeholder="截止日期" name="end_date" value="<{$smarty.get.end_date}>" />
+				<button type="submit" class="btn">筛选</button>
+				<{if $filtered}><a href="/index.php?app=account&act=outdetail&ou_id=<{$info.outer_user_id}>">取消筛选</a><{/if}>
+				</form>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span6 offset6 text-right">
+				<{if $info.password}>
+				访客链接：
+				<a href="<{$smarty.const.SITE_URL}>/index.php?app=out&md5=<{$info.password}>"><{$smarty.const.SITE_URL}>/index.php?app=out&md5=<{$info.password}></a>
+				<{else}>
+				<a class="btn" href="/index.php?app=account&act=makeoutpass&ou_id=<{$info.outer_user_id}>">生成访客链接</a>
+				<{/if}>
+			</div>
+		</div>
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr><th>日期</th><th>账户</th><th>类型</th><th>金额</th><th>事件</th></tr>

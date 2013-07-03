@@ -641,6 +641,12 @@ class BaseVisitor extends Object
             );
             $this->has_login    = false;
         }
+		if (!empty($_SESSION[$this->_info_key]['ou_id'])) {
+            $this->info         = $_SESSION[$this->_info_key];
+			$this->has_out = true;
+		} else {
+			$this->has_out = false;
+		}
     }
     function assign($user_info)
     {
