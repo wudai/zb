@@ -39,8 +39,8 @@
 					<td><{$line.event_date}></td>
 					<td>
 						<{$line.type|enumtostr:"event_account":"type"}>
-						<{if $line.type == 1}><small>至<{$line.extra|accid2name:$user.user_id}></small>
-						<{elseif $line.type == 2}><small>自<{$line.extra|accid2name:$user.user_id}></small>
+						<{if $line.type == 1}><small>至<{$line.extra|accid2name:$info.user_id}></small>
+						<{elseif $line.type == 2}><small>自<{$line.extra|accid2name:$info.user_id}></small>
 						<{/if}>
 					</td>
 					<td><{$line.amount|money}></td>
