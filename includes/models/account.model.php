@@ -32,6 +32,12 @@ class AccountModel extends BaseModel {
 			'foreign_key'	=> 'account_id',
 			'refer_key'		=> 'account_id',
 		),
+		'has_ea'	=> array(
+			'model'			=> 'event_account',
+			'type'			=> HAS_MANY,
+			'foreign_key'	=> 'account_id',
+			'refer_key'		=> 'account_id',
+		),
 	);
 
 	var $_cache = array();

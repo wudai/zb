@@ -18,6 +18,11 @@ class Event_accountModel extends BaseModel {
 			'type'		=> BELONGS_TO,
 			'reverse'	=> 'has_ea',
 		),
+		'belongs_to_account' => array(
+			'model'		=> 'account',
+			'type'		=> BELONGS_TO,
+			'reverse'	=> 'has_ea',
+		),
 	);
 
 	function getTypeList() {

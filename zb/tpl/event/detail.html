@@ -1,0 +1,41 @@
+<{include file="section/header.html"}>
+<div class="container row-fluid">
+	<div class="span7 offset1">
+		<{if $event.type == EventModel::TYPE_EXPENSES}>
+		<div class="title">
+			<h4>消费详情</h4>
+			<span class="right">
+				事件：<span><{$event.comment}></span>
+			</span>
+		</div>
+		<table class="table table-hover event_detail">
+			<thead>
+				<tr>
+					<th><{$event.event_date}></th>
+					<th><{$event.position_name}></th>
+					<th colspan="2"></th>
+					<th><a href="javascript:;"><i class="icon-edit"></i></a>&nbsp;<a href="javascript:;"><i class="icon-trash"></li></a></th>
+				</tr>
+			</thead>
+			<tbody>
+				<{foreach $expenses as $expense}>
+				<tr><td class="first"></td><td><{$expense.expense_name}></td><td><{$expense.type|enumtostr:"expense":"type"}></td><td><{$expense.amount}>元</td><td><{$expense.comment}></td></tr>
+				<{/foreach}>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td>
+						<{if count($accounts) == 1}>
+						由<{foreach $accounts as $account}><{$account.account_name}><{/foreach}>支出：
+						<{else}>
+						<{/if}>
+					</td>
+					<td class="money"><{$event.amount}>元</td>
+				</tr>
+			</tfoot>
+		</table>
+		<{/if}>
+	</div>
+</div>
+<{include file="section/footer.html"}>

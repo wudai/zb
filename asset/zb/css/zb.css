@@ -57,3 +57,57 @@ h4 {
 	font-weight: normal;
 	font-color: 999999;
 }
+.title {
+	margin: 20px 0;
+}
+.title h4{
+	font-size:16px;
+	margin:0;
+	display:inline-block;
+}
+.title span.right {
+	float: right;
+	font-size: 12px;
+	width: 190px;
+}
+.title span.right span {
+	color:#0089dd;
+}
+.event_detail thead {
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+.event_detail thead th {
+	text-align:center;
+}
+.event_detail tbody tr{
+}
+.event_detail td {
+	color:#999;
+	font-weight:normal;
+	text-align:center;
+	border-top: 1px dotted #ddd;
+}
+.event_detail td.first{
+	font-weight:normal;
+	text-align:center;
+	border-top:0;
+}
+.event_detail tfoot {
+	background: #f2f2f2;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	vertical-align: center;
+}
+.event_detail tfoot td {
+	color:#333;
+	text-align:center;
+	height:82px;
+	font-size:12px;
+}
+.event_detail tfoot .money{
+	color:#a00;
+	font-weight:bold;
+	font-size:14px;
+	text-align:center;
+}
