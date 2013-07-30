@@ -8,9 +8,10 @@
 			actions = __getActions(target.className),
 			key = 0;
 			
-			if (!actions.length && '_abutton'.indexOf(target.parentNode.nodeName)) {
+			if (!actions.length && '_abuttontr'.indexOf(target.parentNode.nodeName.toLowerCase())) {
 				target = target.parentNode;
 				actions = __getActions(target.className);
+				e.target = target;
 			}
 			
 			if(ENVOBJ.hotmap&&actions[0]){

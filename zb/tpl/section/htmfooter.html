@@ -2,7 +2,7 @@
 <{if $smarty.const.ASSET_COMBO}>
 <script type="text/javascript">
 window.ENVOBJ = <{$envobj|default:"{}"}>;
-LOADJS('<{$smarty.const.ASSET_SERVER}>??core/js/jquery/jquery.js,core/js/jquery/cookie/jquery.cookie.js,core/js/global/genesis.js,core/js/jquery/pubsub/jquery.pubsub.js,core/js/global/eventrouter.js,/core/js/jquery/iprompt/jquery.iprompt.js,core/js/jquery/interactive/jquery.interactive.js,bootstrap/js/bootstrap.min.js?v=<{$smarty.const.ASSET_VERSION}>', function() {
+LOADJS('<{$smarty.const.ASSET_SERVER}>??core/js/jquery/jquery.js,core/js/jquery/cookie/jquery.cookie.js,core/js/global/genesis.js,core/js/jquery/pubsub/jquery.pubsub.js,core/js/global/eventrouter.js,core/js/jquery/iprompt/jquery.iprompt.js,core/js/jquery/interactive/jquery.interactive.js,bootstrap/js/bootstrap.min.js,core/js/global/header.js?v=<{$smarty.const.ASSET_VERSION}>', function() {
 	$.domains = window.ENVOBJ.domains;
 	var jsArray=new Array(<{jsholder output="1"}><{/jsholder}>);
 	if(jsArray.length){
@@ -19,7 +19,7 @@ LOADJS('<{$smarty.const.ASSET_SERVER}>??core/js/jquery/jquery.js,core/js/jquery/
 window.ENVOBJ = <{$envobj|default:"{}"}>;
 </script>
 <script type="text/javascript">
-LOADJS('<{$smarty.const.ASSET_SERVER}>??core/js/jquery/jquery.js,core/js/jquery/cookie/jquery.cookie.js,core/js/global/genesis.js,core/js/jquery/pubsub/jquery.pubsub.js,core/js/global/eventrouter.js,/core/js/jquery/iprompt/jquery.iprompt.js,core/js/jquery/interactive/jquery.interactive.js,bootstrap/js/bootstrap.min.js?v=<{$smarty.const.ASSET_VERSION}>', function() {
+LOADJS('<{$smarty.const.ASSET_SERVER}>??core/js/jquery/jquery.js,core/js/jquery/cookie/jquery.cookie.js,core/js/global/genesis.js,core/js/jquery/pubsub/jquery.pubsub.js,core/js/global/eventrouter.js,core/js/jquery/iprompt/jquery.iprompt.js,core/js/jquery/interactive/jquery.interactive.js,bootstrap/js/bootstrap.min.js,core/js/global/header.js?v=<{$smarty.const.ASSET_VERSION}>', function() {
 	$.domains = window.ENVOBJ.domains;
 	var jsArray=new Array(<{jsholder output="1"}><{/jsholder}>);
 	if(jsArray.length){

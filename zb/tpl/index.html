@@ -10,6 +10,7 @@
 		<ul class="inline title">
 			<li>记录消费</li>
 			<li><a href="/index.php?act=income">记录收入</a></li>
+			<li><a href="/index.php?app=bill&act=dinner">记录聚餐</a></li>
 		</ul>
 		<form action="/index.php?app=bill&act=expense" method="post" class="form-horizontal">
 		<div class="control-group">
@@ -63,7 +64,7 @@
 		<table class="table table-hover">
 			<tbody>
 				<{foreach $list as $line}>
-				<tr>
+				<tr class="ac_goto" srv="/index.php?app=event&act=detail&id=<{$line.event_id}>">
 					<td><{$line.event_date}></td>
 					<td><{$line.position_name}></td>
 					<td><{$line.amount|money}>元</td>
