@@ -66,7 +66,9 @@
 				<{foreach $list as $line}>
 				<tr class="ac_goto" srv="/index.php?app=event&act=detail&id=<{$line.event_id}>">
 					<td><{$line.event_date}></td>
-					<td><{$line.position_name}></td>
+					<td><{$line.position_name}><{if $line.ex}>
+						<small><{foreach $line.ex as $ex}><{$ex.expense_name}><{if !$ex@last}>、<{/if}><{/foreach}><{if $line.ex_more}>等<{/if}></small>
+						<{/if}></td>
 					<td><{$line.amount|money}>元</td>
 					<td><a href="javascript:;"><i class="icon-edit"></i></a>&nbsp;<a href="javascript:;"><i class="icon-trash"></i></a></td>
 				</tr>

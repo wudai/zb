@@ -8,14 +8,23 @@ class DefaultApp extends FrontendApp{
 			'e.user_id='.$this->_user_id,
 			'type='.EventModel::TYPE_EXPENSES,
 		);
-		$list = $e_mod->find(array(
+		$list = $e_mod->findAll(array(
 			'conditions'	=> implode(' AND ', $conditions),
 			'join'			=> 'belongs_to_position',
 			'fields'		=> 'this.*, pos.position_name',
 			'limit'			=> 20,
 			'count'			=> true,
 			'order'			=> 'event_date DESC, event_id DESC',
+			'include' => array(
+				'has_ex',
+			),
 		));
+		foreach ($list as &$line) {
+			if (count($line['ex']) > 2) {
+				$line['ex'] = array_slice($line['ex'], 0, 2);
+				$line['ex_more'] = true;
+			}
+		}
 		$page = $this->_get_page();
 		$this->_format_page($page);
 		$this->assign('list', $list);
